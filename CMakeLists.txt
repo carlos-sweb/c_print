@@ -45,6 +45,14 @@ install(TARGETS c_print_shared c_print_static
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
+# Configurar e instalar el archivo pkg-config
+configure_file(c_print.pc.in c_print.pc @ONLY)
+
+install(
+    FILES ${CMAKE_BINARY_DIR}/c_print.pc
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+)
+
 # Ejemplo de uso (opcional)
 option(BUILD_EXAMPLES "Build example programs" ON)
 
