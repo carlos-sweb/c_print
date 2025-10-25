@@ -1,6 +1,10 @@
 #ifndef C_PRINT_H
 #define C_PRINT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -120,5 +124,9 @@ void c_printf_styled(TextColor fg, BackgroundColor bg, TextStyle style, const ch
 // Funciones internas
 void apply_ansi_codes(TextColor fg, BackgroundColor bg, TextStyle style);
 void reset_ansi_codes(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // C_PRINT_H

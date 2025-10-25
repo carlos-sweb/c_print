@@ -1,9 +1,10 @@
 cmake_minimum_required(VERSION 3.15)
-project(c_print VERSION 1.0.0 LANGUAGES C)
+project(c_print VERSION 1.0.0 LANGUAGES C CXX)
 
 # Opciones de compilación
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+
 
 # Archivos fuente
 set(SOURCES c_print.c)
