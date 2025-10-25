@@ -31,7 +31,7 @@
 
 #### Download
 ```bash
-git clone https://github.com/carlos-sweb/c_print.git
+git clone https://github.com/yourusername/c_print.git
 cd c_print
 ```
 
@@ -129,11 +129,9 @@ Where specifications can be (in any order):
 - **style**: `bold`, `italic`, `underline`, `dim`, `blink`, `reverse`, `strikethrough`
 - **alignment**: `<N` (left), `>N` (right), `^N` (center) where N is the width
 
-### 🎯 Complete Examples
+### 🎯 Complete Examples (27 total)
 
-The library includes **27 practical examples** demonstrating all features:
-
-#### Example 1-17: Basic Features
+#### Examples 1-17: Basic Features
 1. **Basic pattern** - Simple type usage
 2. **Text color** - Colored text
 3. **Text and background color** - Combined colors
@@ -152,17 +150,17 @@ The library includes **27 practical examples** demonstrating all features:
 16. **Status indicators** - Service status with colored bullets
 17. **Comparison** - Old system vs new pattern system
 
-#### Example 18-27: New Features with Alignment
-18. **Text alignment** - Left, right, center alignment
+#### Examples 18-27: Advanced Features with Alignment
+18. **Text alignment** - Left, right, center alignment demonstrations
 19. **Flexible order** - Specifications in any order
 20. **Alignment with colors** - Combined alignment and styling
-21. **Aligned table** - Professional table with alignment
-22. **Centered menu** - Centered menu system
-23. **Formatted logs** - Logs with timestamp alignment
-24. **Progress bar with alignment** - Advanced progress bars
-25. **Information panel** - System info display panel
-26. **Metrics dashboard** - Server metrics display
-27. **All data types** - All types with alignment
+21. **Aligned table** - Professional table with column alignment
+22. **Centered menu** - Menu system with centered title
+23. **Formatted logs** - Logs with aligned timestamps
+24. **Progress bars with alignment** - Advanced progress indicators
+25. **Information panel** - System info display with borders
+26. **Metrics dashboard** - Server metrics with styled layout
+27. **All data types** - All supported types with alignment
 
 ### 🎨 Available Colors
 
@@ -324,11 +322,9 @@ Donde especificaciones pueden ser (en cualquier orden):
 - **estilo**: `bold`, `italic`, `underline`, `dim`, `blink`, `reverse`, `strikethrough`
 - **alineación**: `<N` (izq), `>N` (der), `^N` (centro) donde N es el ancho
 
-### 🎯 Ejemplos Completos
+### 🎯 Ejemplos Completos (27 en total)
 
-La librería incluye **27 ejemplos prácticos** demostrando todas las características:
-
-#### Ejemplo 1-17: Características Básicas
+#### Ejemplos 1-17: Características Básicas
 1. **Patrón básico** - Uso simple de tipo
 2. **Color de texto** - Texto coloreado
 3. **Color de texto y fondo** - Colores combinados
@@ -344,4 +340,57 @@ La librería incluye **27 ejemplos prácticos** demostrando todas las caracterí
 13. **Barra de progreso** - Indicadores de progreso simulados
 14. **Escape de llaves literales** - Usando `\{` para llaves literales
 15. **Menú interactivo** - Menú con colores y estilos
-16. **Indicadores de esta
+16. **Indicadores de estado** - Estado de servicios con bullets coloreados
+17. **Comparación** - Sistema antiguo vs nuevo sistema de patrones
+
+#### Ejemplos 18-27: Características Avanzadas con Alineación
+18. **Alineación de texto** - Demostraciones de alineación izquierda, derecha, centro
+19. **Orden flexible** - Especificaciones en cualquier orden
+20. **Alineación con colores** - Combinación de alineación y estilos
+21. **Tabla alineada** - Tabla profesional con alineación de columnas
+22. **Menú centrado** - Sistema de menú con título centrado
+23. **Logs formateados** - Logs con timestamps alineados
+24. **Barras de progreso con alineación** - Indicadores avanzados de progreso
+25. **Panel de información** - Visualización de info del sistema con bordes
+26. **Dashboard de métricas** - Métricas del servidor con diseño estilizado
+27. **Todos los tipos de datos** - Todos los tipos soportados con alineación
+
+### 🎨 Colores Disponibles
+
+**Colores de texto:**
+`black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`, `bright_black`, `bright_red`, `bright_green`, `bright_yellow`, `bright_blue`, `bright_magenta`, `bright_cyan`, `bright_white`
+
+**Colores de fondo:**
+Los mismos que colores de texto con prefijo `bg_`: `bg_black`, `bg_red`, `bg_green`, etc.
+
+**Estilos:**
+`bold`, `dim`, `italic`, `underline`, `blink`, `reverse`, `hidden`, `strikethrough`
+
+### 🔍 Pruebas de Memoria con Valgrind
+
+```bash
+# Compilar con símbolos de depuración
+cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Debug
+ninja -C build
+
+# Ejecutar Valgrind
+valgrind --leak-check=full \
+         --show-leak-kinds=all \
+         --track-origins=yes \
+         ./build/example_shared
+```
+
+### 📄 Licencia
+
+Licencia MIT - Ver archivo LICENSE para detalles
+
+### 🤝 Contribuciones
+
+¡Las contribuciones son bienvenidas! Por favor siéntete libre de enviar un Pull Request.
+
+---
+
+### 📞 Contact / Contacto
+
+For questions or support, please open an issue on GitHub.  
+Para preguntas o soporte, por favor abre un issue en GitHub.
