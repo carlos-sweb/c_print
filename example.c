@@ -7,7 +7,8 @@ int main() {
     
     // ========== EJEMPLOS ORIGINALES ==========
     
-    printf("========== 1. Patrón básico - solo tipo ==========\n");
+    //printf("========== 1. Patrón básico - solo tipo ==========\n");
+    c_print("{s:=^52}\n"," 1. Patrón básico - solo tipo ");
     c_print("Hola {s}!\n", "Mundo");
     printf("\n");
     
@@ -211,6 +212,11 @@ int main() {
     printf("╔══════════════════════════════════════════════════════════════╗\n");
     printf("║               Fin de ejemplos - ¡Gracias!                   ║\n");
     printf("╚══════════════════════════════════════════════════════════════╝\n");
+
+
+    c_print("+{s:-^62}+\n"," hola   ");
+    c_print("║               Fin de ejemplos - ¡Gracias!                   ║\n");
+    c_print("╚══════════════════════════════════════════════════════════════╝\n");
     
     return 0;
 }

@@ -91,6 +91,7 @@ typedef struct {
     TextAlign align;
     int width;
     int has_alignment;
+    char fill_char;  
 } PatternStyle;
 
 // Funciones principales con sistema antiguo

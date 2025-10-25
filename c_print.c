@@ -134,15 +134,24 @@ void reset_ansi_codes(void) {
     printf("\033[0m");
 }
 
-// Detectar si un token es alineación (<20, >20, ^20)
-static bool is_alignment(const char* token, TextAlign* align, int* width) {
+// Detectar si un token es alineación (<20, >20, ^20) o con relleno (*^20, ->30)
+static bool is_alignment(const char* token, TextAlign* align, int* width, char* fill_char) {
     if (!token || strlen(token) < 2) return false;
     
-    char first = token[0];
+    const char* ptr = token;
+    *fill_char = ' ';  // Por defecto espacios
+    
+    // Verificar si hay un carácter de relleno al inicio
+    if (strlen(token) >= 3 && (token[1] == '<' || token[1] == '>' || token[1] == '^')) {
+        *fill_char = token[0];
+        ptr = token + 1;  // Saltar el carácter de relleno
+    }
+    
+    char first = ptr[0];
     if (first == '<' || first == '>' || first == '^') {
-        if (is_number(token + 1)) {
+        if (is_number(ptr + 1)) {
             *align = (TextAlign)first;
-            *width = atoi(token + 1);
+            *width = atoi(ptr + 1);
             return true;
         }
     }
@@ -159,7 +168,7 @@ static bool is_background_color(const char* token) {
     return strncmp(temp, "bg_", 3) == 0;
 }
 
-// Parsear un patrón mejorado: {s:green:bg_white:bold:>30}
+// Parsear un patrón mejorado: {s:green:bg_white:bold:*>30}
 static bool parse_pattern(const char* pattern, PatternStyle* style) {
     if (!pattern || pattern[0] != '{') return false;
     
@@ -186,6 +195,8 @@ static bool parse_pattern(const char* pattern, PatternStyle* style) {
     style->align = ALIGN_NONE;
     style->width = 0;
     style->has_alignment = 0;
+    style->fill_char = ' ';  // Espacio por defecto
+    style->fill_char = ' ';  // Espacio por defecto
     
     // Dividir por ':' y procesar tokens
     char* saveptr;
@@ -209,11 +220,13 @@ static bool parse_pattern(const char* pattern, PatternStyle* style) {
                 // Los demás pueden ser en cualquier orden
                 TextAlign align;
                 int width;
+                char fill_char;
                 
-                // Verificar si es alineación
-                if (is_alignment(token, &align, &width)) {
+                // Verificar si es alineación (ahora con soporte para fill_char)
+                if (is_alignment(token, &align, &width, &fill_char)) {
                     style->align = align;
                     style->width = width;
+                    style->fill_char = fill_char;
                     style->has_alignment = 1;
                 }
                 // Verificar si es color de fondo
@@ -246,8 +259,8 @@ static bool parse_pattern(const char* pattern, PatternStyle* style) {
     return style->format_type != '\0';
 }
 
-// Imprimir con alineación
-static void print_aligned(const char* text, TextAlign align, int width) {
+// Imprimir con alineación y carácter de relleno
+static void print_aligned(const char* text, TextAlign align, int width, char fill_char) {
     int text_len = strlen(text);
     
     if (text_len >= width) {
@@ -261,11 +274,11 @@ static void print_aligned(const char* text, TextAlign align, int width) {
     switch (align) {
         case ALIGN_LEFT:  // <
             printf("%s", text);
-            for (int i = 0; i < padding; i++) printf(" ");
+            for (int i = 0; i < padding; i++) printf("%c", fill_char);
             break;
             
         case ALIGN_RIGHT:  // >
-            for (int i = 0; i < padding; i++) printf(" ");
+            for (int i = 0; i < padding; i++) printf("%c", fill_char);
             printf("%s", text);
             break;
             
@@ -273,9 +286,9 @@ static void print_aligned(const char* text, TextAlign align, int width) {
             {
                 int left_pad = padding / 2;
                 int right_pad = padding - left_pad;
-                for (int i = 0; i < left_pad; i++) printf(" ");
+                for (int i = 0; i < left_pad; i++) printf("%c", fill_char);
                 printf("%s", text);
-                for (int i = 0; i < right_pad; i++) printf(" ");
+                for (int i = 0; i < right_pad; i++) printf("%c", fill_char);
             }
             break;
             
@@ -363,7 +376,7 @@ void c_print(const char* pattern, ...) {
                 
                 // Imprimir con o sin alineación
                 if (style.has_alignment) {
-                    print_aligned(value_buffer, style.align, style.width);
+                    print_aligned(value_buffer, style.align, style.width, style.fill_char);
                 } else {
                     printf("%s", value_buffer);
                 }
