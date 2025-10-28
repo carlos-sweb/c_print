@@ -1,13 +1,13 @@
 #ifndef C_PRINT_H
 #define C_PRINT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 // Códigos ANSI para colores de texto
 typedef enum {
@@ -81,7 +81,7 @@ typedef struct {
 
 // Estructura interna para parsear patrones
 typedef struct {
-    char format_type;  // 's', 'd', 'f', etc.
+    char format_type;  // 's', 'd', 'f', 'b', etc.
     TextColor text_color;
     BackgroundColor bg_color;
     TextStyle style;
@@ -91,7 +91,20 @@ typedef struct {
     TextAlign align;
     int width;
     int has_alignment;
-    char fill_char;  
+    char fill_char;    // Carácter de relleno (por defecto ' ')
+    
+    // Nuevos modificadores de formato
+    int precision;     // Precisión para floats (.2, .4, etc.)
+    int has_precision;
+    int padding;       // Ancho de padding (05, 10, etc.)
+    int zero_pad;      // Si es padding con ceros (05 vs 5)
+    char separator;    // Separador de miles (',' o '_')
+    int has_separator;
+    int show_prefix;   // Mostrar prefijo (0b, 0x, 0o) con #
+    int show_sign;     // Mostrar signo siempre (+) o espacio ( )
+    int truncate;      // Truncar strings a N caracteres
+    int has_truncate;
+    int as_percentage; // Mostrar como porcentaje (%)
 } PatternStyle;
 
 // Funciones principales con sistema antiguo

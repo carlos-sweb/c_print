@@ -20,6 +20,74 @@ static bool is_number(const char* str) {
     return true;
 }
 
+// Formatear un número entero con separadores de miles
+static void format_with_separator(char* buffer, size_t size, long long num, char separator) {
+    char temp[100];
+    snprintf(temp, sizeof(temp), "%lld", num);
+    
+    int len = strlen(temp);
+    int negative = (temp[0] == '-') ? 1 : 0;
+    int digits = len - negative;
+    int commas = (digits - 1) / 3;
+    int total = len + commas;
+    
+    if (total >= (int)size) {
+        strncpy(buffer, temp, size - 1);
+        buffer[size - 1] = '\0';
+        return;
+    }
+    
+    int src = len - 1;
+    int dst = total;
+    buffer[dst--] = '\0';
+    
+    int count = 0;
+    while (src >= negative) {
+        if (count == 3) {
+            buffer[dst--] = separator;
+            count = 0;
+        }
+        buffer[dst--] = temp[src--];
+        count++;
+    }
+    
+    if (negative) {
+        buffer[0] = '-';
+    }
+}
+
+// Formatear número binario
+static void format_binary(char* buffer, size_t size, unsigned long long num, int show_prefix) {
+    char temp[100];
+    int idx = 0;
+    
+    if (num == 0) {
+        if (show_prefix) {
+            snprintf(buffer, size, "0b0");
+        } else {
+            snprintf(buffer, size, "0");
+        }
+        return;
+    }
+    
+    unsigned long long n = num;
+    while (n > 0) {
+        temp[idx++] = (n & 1) ? '1' : '0';
+        n >>= 1;
+    }
+    
+    int offset = 0;
+    if (show_prefix) {
+        buffer[offset++] = '0';
+        buffer[offset++] = 'b';
+    }
+    
+    for (int i = idx - 1; i >= 0; i--) {
+        buffer[offset++] = temp[i];
+    }
+    buffer[offset] = '\0';
+}
+
 // Parsear color de texto desde string
 TextColor parse_text_color(const char* color) {
     if (!color || strlen(color) == 0) return COLOR_RESET;
@@ -134,7 +202,72 @@ void reset_ansi_codes(void) {
     printf("\033[0m");
 }
 
-// Detectar si un token es alineación (<20, >20, ^20) o con relleno (*^20, ->30)
+// Detectar modificadores de formato numérico
+static bool is_format_modifier(const char* token, PatternStyle* style) {
+    if (!token || strlen(token) == 0) return false;
+    
+    const char* ptr = token;
+    bool found = false;
+    
+    // Detectar precisión (.2, .4, etc.)
+    if (*ptr == '.' && isdigit(*(ptr + 1))) {
+        style->precision = atoi(ptr + 1);
+        style->has_precision = 1;
+        return true;
+    }
+    
+    // Detectar padding con ceros (05, 08, etc.)
+    if (*ptr == '0' && isdigit(*(ptr + 1))) {
+        style->padding = atoi(ptr + 1);
+        style->zero_pad = 1;
+        return true;
+    }
+    
+    // Detectar padding normal (solo número sin 0 al inicio)
+    if (isdigit(*ptr) && *ptr != '0') {
+        style->padding = atoi(ptr);
+        style->zero_pad = 0;
+        return true;
+    }
+    
+    // Detectar separador de miles
+    if (strcmp(token, ",") == 0) {
+        style->separator = ',';
+        style->has_separator = 1;
+        return true;
+    }
+    if (strcmp(token, "_") == 0) {
+        style->separator = '_';
+        style->has_separator = 1;
+        return true;
+    }
+    
+    // Detectar prefijo (#)
+    if (strcmp(token, "#") == 0) {
+        style->show_prefix = 1;
+        return true;
+    }
+    
+    // Detectar signo (+)
+    if (strcmp(token, "+") == 0) {
+        style->show_sign = 1;
+        return true;
+    }
+    
+    // Detectar espacio para signo ( )
+    if (strcmp(token, " ") == 0) {
+        style->show_sign = 2;  // 2 = espacio
+        return true;
+    }
+    
+    // Detectar porcentaje (%)
+    if (strcmp(token, "%") == 0) {
+        style->as_percentage = 1;
+        return true;
+    }
+    
+    return found;
+}
 static bool is_alignment(const char* token, TextAlign* align, int* width, char* fill_char) {
     if (!token || strlen(token) < 2) return false;
     
@@ -196,6 +329,19 @@ static bool parse_pattern(const char* pattern, PatternStyle* style) {
     style->width = 0;
     style->has_alignment = 0;
     style->fill_char = ' ';  // Espacio por defecto
+    
+    // Inicializar nuevos modificadores
+    style->precision = 6;  // Precisión por defecto para floats
+    style->has_precision = 0;
+    style->padding = 0;
+    style->zero_pad = 0;
+    style->separator = '\0';
+    style->has_separator = 0;
+    style->show_prefix = 0;
+    style->show_sign = 0;
+    style->truncate = 0;
+    style->has_truncate = 0;
+    style->as_percentage = 0;
     style->fill_char = ' ';  // Espacio por defecto
     
     // Dividir por ':' y procesar tokens
@@ -204,19 +350,25 @@ static bool parse_pattern(const char* pattern, PatternStyle* style) {
     int part = 0;
     
     while (token != NULL) {
-        // Eliminar espacios
-        while (*token == ' ') token++;
-        char* end_token = token + strlen(token) - 1;
-        while (end_token > token && *end_token == ' ') {
-            *end_token = '\0';
-            end_token--;
-        }
+        // NO eliminar espacios aquí para todos los tokens
+        // Solo para tokens de especificadores (no el primero que es el tipo)
         
         if (strlen(token) > 0) {
             if (part == 0) {
                 // Primera parte siempre es el tipo de formato
+                // Aquí sí podemos hacer trim
+                while (*token == ' ') token++;
                 style->format_type = token[0];
             } else {
+                // Para los especificadores, sí hacemos trim
+                // Eliminar espacios
+                while (*token == ' ') token++;
+                char* end_token = token + strlen(token) - 1;
+                while (end_token > token && *end_token == ' ') {
+                    *end_token = '\0';
+                    end_token--;
+                }
+                
                 // Los demás pueden ser en cualquier orden
                 TextAlign align;
                 int width;
@@ -228,6 +380,10 @@ static bool parse_pattern(const char* pattern, PatternStyle* style) {
                     style->width = width;
                     style->fill_char = fill_char;
                     style->has_alignment = 1;
+                }
+                // Verificar si es un modificador de formato
+                else if (is_format_modifier(token, style)) {
+                    // Ya se procesó en is_format_modifier
                 }
                 // Verificar si es color de fondo
                 else if (is_background_color(token)) {
@@ -324,19 +480,63 @@ void c_print(const char* pattern, ...) {
                     case 's': {
                         char* str = va_arg(args, char*);
                         if (str) {
-                            snprintf(value_buffer, sizeof(value_buffer), "%s", str);
+                            // Aplicar truncamiento si está especificado
+                            if (style.has_truncate && strlen(str) > (size_t)style.truncate) {
+                                snprintf(value_buffer, sizeof(value_buffer), "%.*s", style.truncate, str);
+                            } else {
+                                snprintf(value_buffer, sizeof(value_buffer), "%s", str);
+                            }
                         }
                         break;
                     }
                     case 'd':
                     case 'i': {
                         int num = va_arg(args, int);
-                        snprintf(value_buffer, sizeof(value_buffer), "%d", num);
+                        
+                        // Con separador de miles
+                        if (style.has_separator) {
+                            format_with_separator(value_buffer, sizeof(value_buffer), num, style.separator);
+                        }
+                        // Con padding y signo
+                        else if (style.padding > 0 || style.show_sign) {
+                            char fmt[20] = "%";
+                            if (style.show_sign == 1) strcat(fmt, "+");
+                            else if (style.show_sign == 2) strcat(fmt, " ");
+                            if (style.zero_pad) strcat(fmt, "0");
+                            if (style.padding > 0) {
+                                char width[10];
+                                snprintf(width, sizeof(width), "%d", style.padding);
+                                strcat(fmt, width);
+                            }
+                            strcat(fmt, "d");
+                            snprintf(value_buffer, sizeof(value_buffer), fmt, num);
+                        }
+                        // Normal
+                        else {
+                            snprintf(value_buffer, sizeof(value_buffer), "%d", num);
+                        }
                         break;
                     }
                     case 'f': {
                         double num = va_arg(args, double);
-                        snprintf(value_buffer, sizeof(value_buffer), "%f", num);
+                        
+                        // Como porcentaje
+                        if (style.as_percentage) {
+                            num *= 100.0;
+                            if (style.has_precision) {
+                                snprintf(value_buffer, sizeof(value_buffer), "%.*f%%", style.precision, num);
+                            } else {
+                                snprintf(value_buffer, sizeof(value_buffer), "%.1f%%", num);
+                            }
+                        }
+                        // Con precisión específica
+                        else if (style.has_precision) {
+                            snprintf(value_buffer, sizeof(value_buffer), "%.*f", style.precision, num);
+                        }
+                        // Normal
+                        else {
+                            snprintf(value_buffer, sizeof(value_buffer), "%f", num);
+                        }
                         break;
                     }
                     case 'c': {
@@ -344,24 +544,55 @@ void c_print(const char* pattern, ...) {
                         snprintf(value_buffer, sizeof(value_buffer), "%c", ch);
                         break;
                     }
+                    case 'b': {
+                        // Binario
+                        unsigned int num = va_arg(args, unsigned int);
+                        format_binary(value_buffer, sizeof(value_buffer), num, style.show_prefix);
+                        break;
+                    }
                     case 'x': {
                         unsigned int num = va_arg(args, unsigned int);
-                        snprintf(value_buffer, sizeof(value_buffer), "%x", num);
+                        if (style.show_prefix) {
+                            if (style.padding > 0 && style.zero_pad) {
+                                snprintf(value_buffer, sizeof(value_buffer), "0x%0*x", 
+                                        style.padding - 2, num);
+                            } else {
+                                snprintf(value_buffer, sizeof(value_buffer), "0x%x", num);
+                            }
+                        } else {
+                            if (style.padding > 0 && style.zero_pad) {
+                                snprintf(value_buffer, sizeof(value_buffer), "%0*x", style.padding, num);
+                            } else {
+                                snprintf(value_buffer, sizeof(value_buffer), "%x", num);
+                            }
+                        }
                         break;
                     }
                     case 'o': {
                         unsigned int num = va_arg(args, unsigned int);
-                        snprintf(value_buffer, sizeof(value_buffer), "%o", num);
+                        if (style.show_prefix) {
+                            snprintf(value_buffer, sizeof(value_buffer), "0o%o", num);
+                        } else {
+                            snprintf(value_buffer, sizeof(value_buffer), "%o", num);
+                        }
                         break;
                     }
                     case 'u': {
                         unsigned int num = va_arg(args, unsigned int);
-                        snprintf(value_buffer, sizeof(value_buffer), "%u", num);
+                        if (style.has_separator) {
+                            format_with_separator(value_buffer, sizeof(value_buffer), num, style.separator);
+                        } else {
+                            snprintf(value_buffer, sizeof(value_buffer), "%u", num);
+                        }
                         break;
                     }
                     case 'l': {
                         long num = va_arg(args, long);
-                        snprintf(value_buffer, sizeof(value_buffer), "%ld", num);
+                        if (style.has_separator) {
+                            format_with_separator(value_buffer, sizeof(value_buffer), num, style.separator);
+                        } else {
+                            snprintf(value_buffer, sizeof(value_buffer), "%ld", num);
+                        }
                         break;
                     }
                     default:

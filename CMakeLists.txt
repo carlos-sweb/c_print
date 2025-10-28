@@ -58,10 +58,10 @@ install(
 option(BUILD_EXAMPLES "Build example programs" ON)
 
 if(BUILD_EXAMPLES)
-    add_executable(example_shared example.c)
+    add_executable(example_shared test/example.c)
     target_link_libraries(example_shared c_print_shared)
     
-    add_executable(example_static example.c)
+    add_executable(example_static test/example.c)
     target_link_libraries(example_static c_print_static)
 endif()
 
