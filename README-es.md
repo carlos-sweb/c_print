@@ -1,61 +1,61 @@
 # c_print
 
-**Biblioteca en C para impresi�n de texto con colores y formato en la consola usando c�digos ANSI**
+**Biblioteca C para imprimir texto coloreado y formateado en la consola usando códigos de escape ANSI**
 
-[![Versi�n](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/carlos-sweb/c_print)
-[![Est�ndar C](https://img.shields.io/badge/C-C99%20%7C%20C11-orange.svg)](https://en.wikipedia.org/wiki/C11_(C_standard_revision))
-[![Licencia](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/carlos-sweb/c_print)
+[![C Standard](https://img.shields.io/badge/C-C99%20%7C%20C11-orange.svg)](https://en.wikipedia.org/wiki/C11_(C_standard_revision))
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
-Español | [English](README.md)
+[English](README.md) | Español
 
-## Descripci�n
+## Descripción
 
-`c_print` es una biblioteca completa en C que proporciona tres enfoques distintos para imprimir texto formateado y coloreado en la terminal. Con soporte para colores ANSI, estilos de texto, alineaci�n avanzada y formato de n�meros, la biblioteca ofrece flexibilidad para diferentes casos de uso y preferencias de programaci�n.
+`c_print` es una biblioteca C completa que proporciona tres enfoques distintos para imprimir texto formateado y coloreado en la terminal. Con soporte para colores ANSI, estilos de texto, alineación avanzada y formateo de números, la biblioteca ofrece flexibilidad para diferentes casos de uso y preferencias de programación.
 
-## Caracter�sticas Principales
+## Características Principales
 
-- <� **16 colores ANSI** (8 est�ndar + 8 brillantes)
-- =� **8 estilos de texto** (negrita, cursiva, subrayado, etc.)
-- =� **Alineaci�n de texto** (izquierda, derecha, centro con caracteres de relleno personalizables)
-- =" **Formato avanzado de n�meros** (separadores de miles, padding, bases num�ricas)
-- <� **Tres APIs distintas** para diferentes necesidades
-- = **Seguridad de tipos** (seg�n el enfoque elegido)
-- =' **Modular y extensible**
-- = **Compatible con C++ y C99/C11**
-- =� **Biblioteca compartida y est�tica**
+- 🎨 **16 colores ANSI** (8 estándar + 8 brillantes)
+- 🖌️ **8 estilos de texto** (negrita, cursiva, subrayado, etc.)
+- 📏 **Alineación de texto** (izquierda, derecha, centro con caracteres de relleno personalizables)
+- 🔢 **Formateo avanzado de números** (separadores de miles, relleno, bases numéricas)
+- 🎯 **Tres APIs distintas** para diferentes necesidades
+- 🔒 **Seguridad de tipos** (dependiendo del enfoque elegido)
+- 🔧 **Modular y extensible**
+- 🔗 **Compatible con C++ y C99/C11**
+- 📦 **Biblioteca compartida y estática**
 
 ---
 
-## Los 3 Enfoques de Impresi�n
+## Los 3 Enfoques de Impresión
 
 ### 1. API Basada en Patrones (Recomendada)
 
 **Archivo:** `c_print.h`
 
-Este es el enfoque principal y m�s flexible, usando patrones de formato con sintaxis `{tipo:especificador1:especificador2:...}`.
+Este es el enfoque principal y más flexible, utilizando patrones de formato con sintaxis `{type:specifier1:specifier2:...}`.
 
-#### Sintaxis B�sica
+#### Sintaxis Básica
 
 ```c
-c_print("Texto con {tipo:especificadores}", valor);
+c_print("Text with {type:specifiers}", value);
 ```
 
 #### Tipos Soportados
 
-- `{s:...}` - Cadena de texto (string)
+- `{s:...}` - Cadena
 - `{d:...}` o `{i:...}` - Entero (int)
 - `{f:...}` - Decimal (float/double)
-- `{c:...}` - Car�cter (char)
+- `{c:...}` - Carácter (char)
 - `{b:...}` - Binario
 - `{x:...}` - Hexadecimal
 - `{o:...}` - Octal
-- `{u:...}` - Entero sin signo (unsigned)
-- `{l:...}` - Entero largo (long)
+- `{u:...}` - Entero sin signo
+- `{l:...}` - Entero largo
 
 #### Especificadores Disponibles
 
 **Colores:**
-- B�sicos: `red`, `green`, `blue`, `cyan`, `magenta`, `yellow`, `white`, `black`
+- Básicos: `red`, `green`, `blue`, `cyan`, `magenta`, `yellow`, `white`, `black`
 - Brillantes: `bright_red`, `bright_green`, `bright_blue`, etc.
 - Fondos: `bg_red`, `bg_green`, `bg_blue`, etc.
 
@@ -64,23 +64,23 @@ c_print("Texto con {tipo:especificadores}", valor);
 - `italic` - Cursiva
 - `underline` - Subrayado
 - `dim` - Atenuado
-- `blink` - Parpadeante
+- `blink` - Parpadeo
 - `reverse` - Invertido
 - `strikethrough` - Tachado
 
-**Alineaci�n:**
+**Alineación:**
 - `<N` - Alinear a la izquierda (ancho N)
 - `>N` - Alinear a la derecha (ancho N)
 - `^N` - Centrar (ancho N)
-- `*^N` - Centrar con car�cter de relleno personalizado
+- `*^N` - Centrar con carácter de relleno personalizado
 
-**Formato de N�meros:**
-- `.N` - Precisi�n decimal (ej: `.2` para 2 decimales)
-- `0N` - Padding con ceros (ej: `05` para 00042)
+**Formateo de Números:**
+- `.N` - Precisión decimal (e.g., `.2` para 2 decimales)
+- `0N` - Relleno con ceros (e.g., `05` para 00042)
 - `,` - Separador de miles con coma
 - `_` - Separador de miles con guion bajo
 - `#` - Mostrar prefijo (0b, 0x, 0o)
-- `+` - Mostrar siempre el signo
+- `+` - Siempre mostrar signo
 - `%` - Formatear como porcentaje
 
 #### Ejemplos
@@ -89,31 +89,31 @@ c_print("Texto con {tipo:especificadores}", valor);
 #include "c_print.h"
 
 int main() {
-    // Texto simple con color
-    c_print("�Hola {s:green}!\n", "Mundo");
+    // Simple colored text
+    c_print("Hello {s:green}!\n", "World");
 
-    // M�ltiples especificadores
-    c_print("{s:cyan:bg_black:bold}\n", "IMPORTANTE");
+    // Multiple specifiers
+    c_print("{s:cyan:bg_black:bold}\n", "IMPORTANT");
 
-    // Varios valores
-    c_print("Usuario: {s:yellow}, Edad: {d:blue}, Puntaje: {f:.2:green}\n",
-            "Ana", 25, 95.5);
+    // Multiple values
+    c_print("User: {s:yellow}, Age: {d:blue}, Score: {f:.2:green}\n",
+            "Alice", 25, 95.5);
 
-    // Formato de n�meros
-    c_print("Poblaci�n: {d:,}\n", 1234567);               // 1,234,567
-    c_print("Progreso: {f:.1%:cyan}\n", 0.85);            // 85.0%
+    // Number formatting
+    c_print("Population: {d:,}\n", 1234567);               // 1,234,567
+    c_print("Progress: {f:.1%:cyan}\n", 0.85);            // 85.0%
     c_print("Hex: 0x{x:bold}\n", 255);                    // 0xFF
-    c_print("Precio: ${f:.2:,}\n", 1234.56);              // $1,234.56
+    c_print("Price: ${f:.2:,}\n", 1234.56);               // $1,234.56
 
-    // Alineaci�n
-    c_print("|{s:<20}|\n", "Izquierda");
-    c_print("|{s:>20}|\n", "Derecha");
-    c_print("|{s:^20}|\n", "Centro");
-    c_print("|{s:*^20}|\n", "Relleno");                   // |*****Relleno*****|
+    // Alignment
+    c_print("|{s:<20}|\n", "Left");
+    c_print("|{s:>20}|\n", "Right");
+    c_print("|{s:^20}|\n", "Center");
+    c_print("|{s:*^20}|\n", "Fill");                      // |*******Fill*******|
 
-    // Ejemplo complejo
+    // Complex example
     c_print("[{s:bright_green:bold}] {s:white} - {f:.2:green} ms\n",
-            "OK", "Solicitud completada", 45.32);
+            "SUCCESS", "Request completed", 45.32);
 
     return 0;
 }
@@ -121,59 +121,59 @@ int main() {
 
 **Ventajas:**
 - Sintaxis compacta y legible
-- Muy flexible y potente
-- Similar a printf pero con colores y formato avanzado
-- Ideal para la mayor�a de casos de uso
+- Muy flexible y poderosa
+- Similar a printf pero con colores y formateo avanzado
+- Ideal para la mayoría de los casos de uso
 
 **Limitaciones:**
-- Verificaci�n de tipos en tiempo de ejecuci�n
-- Requiere cuidado con el orden de argumentos
+- Verificación de tipos solo en tiempo de ejecución
+- Requiere cuidado con el orden de los argumentos
 
 ---
 
-### 2. API Patr�n Constructor (Builder)
+### 2. API de Patrón Builder
 
 **Archivo:** `c_print_builder.h`
 
-Este enfoque elimina las funciones vari�dicas, proporcionando seguridad de tipos completa en tiempo de compilaci�n mediante funciones expl�citas para cada tipo de dato.
+Este enfoque elimina las funciones variádicas, proporcionando seguridad de tipos completa en tiempo de compilación a través de funciones explícitas para cada tipo de dato.
 
 #### Funciones Principales
 
 ```c
-// Crear y liberar
-CPrintBuilder* cp_new(void);              // Crear constructor
-void cp_free(CPrintBuilder* b);           // Liberar memoria
-void cp_reset(CPrintBuilder* b);          // Resetear para reutilizar
+// Create and free
+CPrintBuilder* cp_new(void);              // Create builder
+void cp_free(CPrintBuilder* b);           // Free memory
+void cp_reset(CPrintBuilder* b);          // Reset for reuse
 
-// Agregar contenido (tipado seguro)
-cp_text(b, "texto");                      // Texto literal sin formato
-cp_str(b, variable_string);               // String formateado
-cp_int(b, 42);                            // Entero
+// Add content (type-safe)
+cp_text(b, "text");                       // Literal text without formatting
+cp_str(b, variable_string);               // Formatted string
+cp_int(b, 42);                            // Integer
 cp_float(b, 3.14);                        // Decimal
-cp_char(b, 'A');                          // Car�cter
-cp_bool(b, true);                         // Booleano
-cp_binary(b, 255);                        // Binario
+cp_char(b, 'A');                          // Character
+cp_bool(b, true);                         // Boolean
+cp_binary(b, 255);                        // Binary
 cp_hex(b, 255);                           // Hexadecimal
 
-// Aplicar formato (encadenable)
-cp_color_str(b, "red");                   // Color de texto
-cp_bg_str(b, "bg_blue");                  // Color de fondo
-cp_style_str(b, "bold");                  // Estilo
-cp_precision(b, 2);                       // Precisi�n decimal
-cp_zero_pad(b, 5);                        // Padding con ceros
-cp_separator(b, ',');                     // Separador de miles
-cp_show_prefix(b, true);                  // Mostrar 0x, 0b, etc.
-cp_show_sign(b, true);                    // Mostrar signo +/-
-cp_as_percentage(b, true);                // Formatear como %
-cp_align_left(b, 20);                     // Alinear izquierda
-cp_align_right(b, 20);                    // Alinear derecha
-cp_align_center(b, 20);                   // Centrar
-cp_fill_char(b, '*');                     // Car�cter de relleno
+// Apply formatting (chainable)
+cp_color_str(b, "red");                   // Text color
+cp_bg_str(b, "bg_blue");                  // Background color
+cp_style_str(b, "bold");                  // Style
+cp_precision(b, 2);                       // Decimal precision
+cp_zero_pad(b, 5);                        // Zero padding
+cp_separator(b, ',');                     // Thousands separator
+cp_show_prefix(b, true);                  // Show 0x, 0b, etc.
+cp_show_sign(b, true);                    // Show +/- sign
+cp_as_percentage(b, true);                // Format as %
+cp_align_left(b, 20);                     // Left align
+cp_align_right(b, 20);                    // Right align
+cp_align_center(b, 20);                   // Center
+cp_fill_char(b, '*');                     // Fill character
 
-// Imprimir
-cp_print(b);                              // Imprimir
-cp_println(b);                            // Imprimir con salto de l�nea
-char* str = cp_to_string(b);              // Obtener string (debe liberarse)
+// Print
+cp_print(b);                              // Print
+cp_println(b);                            // Print with newline
+char* str = cp_to_string(b);              // Get string (must free)
 ```
 
 #### Ejemplos
@@ -184,31 +184,31 @@ char* str = cp_to_string(b);              // Obtener string (debe liberarse)
 int main() {
     CPrintBuilder* b = cp_new();
 
-    // Construcci�n tipo segura
-    cp_text(b, "Empleado: ");
+    // Type-safe construction
+    cp_text(b, "Employee: ");
     cp_str(cp_color_str(b, "cyan"), "Carlos");
-    cp_text(b, " | Salario: $");
+    cp_text(b, " | Salary: $");
     cp_float(cp_precision(cp_color_str(b, "green"), 2), 75000.50);
     cp_println(b);
-    // Salida: Empleado: Carlos | Salario: $75000.50
+    // Output: Employee: Carlos | Salary: $75000.50
 
-    // Reutilizar el constructor
+    // Reuse builder
     cp_reset(b);
     cp_text(b, "ID: ");
     cp_int(cp_zero_pad(b, 5), 42);
     cp_println(b);
-    // Salida: ID: 00042
+    // Output: ID: 00042
 
-    // N�mero con separadores
+    // Number with separators
     cp_reset(b);
-    cp_text(b, "Poblaci�n: ");
+    cp_text(b, "Population: ");
     cp_int(cp_separator(b, ','), 1234567);
     cp_println(b);
-    // Salida: Poblaci�n: 1,234,567
+    // Output: Population: 1,234,567
 
-    // Encadenamiento complejo
+    // Complex chaining
     cp_reset(b);
-    cp_text(b, "Precio: $");
+    cp_text(b, "Price: $");
     cp_float(
         cp_separator(
             cp_precision(
@@ -220,7 +220,7 @@ int main() {
         9999.99
     );
     cp_println(b);
-    // Salida: Precio: $9,999.99 (en verde)
+    // Output: Price: $9,999.99 (in green)
 
     cp_free(b);
     return 0;
@@ -228,24 +228,24 @@ int main() {
 ```
 
 **Ventajas:**
-- **Seguridad de tipos en tiempo de compilaci�n**: Imposible mezclar tipos
-- Sin funciones vari�dicas
+- **Seguridad de tipos en tiempo de compilación**: Imposible mezclar tipos
+- Sin funciones variádicas
 - API limpia y encadenable
 - Reutilizable (con `cp_reset`)
-- Gesti�n autom�tica de memoria interna
+- Gestión automática de memoria interna
 
 **Limitaciones:**
-- Sintaxis m�s verbosa
-- Requiere crear y liberar el constructor
-- Menos flexible que el API de patrones
+- Sintaxis más verbosa
+- Requiere crear y liberar el builder
+- Menos flexible que la API de patrones
 
 ---
 
-### 3. API Gen�rica (C11 _Generic)
+### 3. API Genérica (C11 _Generic)
 
 **Archivo:** `c_print_generic.h`
 
-Este enfoque usa `_Generic` de C11 para detectar autom�ticamente los tipos de argumentos, combinando la comodidad de las funciones vari�dicas con la seguridad de tipos en tiempo de compilaci�n.
+Este enfoque utiliza `_Generic` de C11 para detectar automáticamente los tipos de argumentos, combinando la conveniencia de las funciones variádicas con la seguridad de tipos en tiempo de compilación.
 
 #### Macro Principal
 
@@ -253,21 +253,21 @@ Este enfoque usa `_Generic` de C11 para detectar autom�ticamente los tipos de 
 #define C_PRINT(pattern, ...)
 ```
 
-#### Configuraci�n
+#### Configuración
 
 ```c
-#define C_PRINT_USE_GENERIC          // Habilitar API gen�rica
+#define C_PRINT_USE_GENERIC          // Enable generic API
 #include "c_print.h"
 #include "c_print_generic.h"
 ```
 
-#### Caracter�sticas
+#### Características
 
-- Detecci�n autom�tica de tipos usando `_Generic`
-- Advertencias en tiempo de compilaci�n
-- Detecci�n de discordancia de tipos en tiempo de ejecuci�n
-- Modo estricto con abort en errores
-- Modo debug para inspeccionar tipos
+- Detección automática de tipos usando `_Generic`
+- Advertencias en tiempo de compilación
+- Detección de desajustes de tipos en tiempo de ejecución
+- Modo estricto con aborto en errores
+- Modo de depuración para inspeccionar tipos
 
 #### Ejemplos
 
@@ -277,21 +277,21 @@ Este enfoque usa `_Generic` de C11 para detectar autom�ticamente los tipos de 
 #include "c_print_generic.h"
 
 int main() {
-    const char* nombre = "Mar�a";
-    int edad = 30;
-    double salario = 85000.75;
+    const char* name = "Maria";
+    int age = 30;
+    double salary = 85000.75;
 
-    // Detecci�n autom�tica de tipos
-    C_PRINT("Nombre: {s:blue}\n", nombre);           //  OK
-    C_PRINT("Edad: {d:yellow}\n", edad);             //  OK
-    C_PRINT("Salario: ${f:.2:green:,}\n", salario);  //  OK
+    // Automatic type detection
+    C_PRINT("Name: {s:blue}\n", name);               // ✓ OK
+    C_PRINT("Age: {d:yellow}\n", age);               // ✓ OK
+    C_PRINT("Salary: ${f:.2:green:,}\n", salary);    // ✓ OK
 
-    // Detecci�n de discordancia de tipos
-    C_PRINT("Error: {s:red}\n", 500);                // � Advertencia: int pasado para string
+    // Type mismatch detection
+    C_PRINT("Error: {s:red}\n", 500);                // ⚠️ Warning: int passed for string
 
-    // Debug de tipos
-    C_PRINT_DEBUG_TYPES("{s} {d} {f}", nombre, edad, salario);
-    // Salida: Argument 0: type=string
+    // Debug types
+    C_PRINT_DEBUG_TYPES("{s} {d} {f}", name, age, salary);
+    // Output: Argument 0: type=string
     //         Argument 1: type=int
     //         Argument 2: type=double
 
@@ -308,182 +308,182 @@ int main() {
 #include "c_print_generic.h"
 
 int main() {
-    C_PRINT("{d}", "incorrecto");  // L Aborta el programa con mensaje de error
+    C_PRINT("{d}", "wrong");  // ❌ Aborts program with error message
     return 0;
 }
 ```
 
 #### Tipos Soportados
 
-- `const char*`, `char*` � string
-- `int`, `signed char`, `unsigned char` � int
-- `unsigned int` � unsigned
-- `long`, `long long` � long
-- `unsigned long`, `unsigned long long` � unsigned long
-- `float`, `double` � double
-- `char` � char
-- `_Bool` � bool
-- `void*` � pointer
+- `const char*`, `char*` → string
+- `int`, `signed char`, `unsigned char` → int
+- `unsigned int` → unsigned
+- `long`, `long long` → long
+- `unsigned long`, `unsigned long long` → unsigned long
+- `float`, `double` → double
+- `char` → char
+- `_Bool` → bool
+- `void*` → pointer
 
 **Ventajas:**
-- Combinaci�n perfecta de comodidad y seguridad
-- Sintaxis simple como el API de patrones
-- Verificaci�n de tipos en tiempo de compilaci�n y ejecuci�n
+- Combinación perfecta de conveniencia y seguridad
+- Sintaxis simple como la API de patrones
+- Verificación de tipos en tiempo de compilación y ejecución
 - Mensajes de error informativos
 
 **Limitaciones:**
-- Requiere C11 o superior
+- Requiere C11 o posterior
 - No compatible con C99
-- Overhead m�nimo por verificaci�n de tipos
+- Sobrecarga mínima para verificación de tipos
 
 ---
 
-## Comparaci�n de las 3 APIs
+## Comparación de las 3 APIs
 
-| Caracter�stica | Patrones | Constructor | Gen�rica |
-|----------------|----------|-------------|----------|
-| **Seguridad de tipos** | Solo en ejecuci�n | En compilaci�n | En compilaci�n + ejecuci�n |
-| **Funciones vari�dicas** | S� | No | S� (con _Generic) |
-| **Overhead de memoria** | Bajo | Buffer interno | Bajo |
-| **Flexibilidad** | Alta | Limitada | Alta |
-| **Facilidad de uso** | Muy f�cil | Moderada | F�cil |
-| **Est�ndar C requerido** | C99 | C99 | C11 |
-| **Mensajes de error** | En ejecuci�n | En compilaci�n | Ambos |
-| **Sintaxis** | Compacta | Verbosa | Compacta |
-| **Caso de uso ideal** | Uso general | C�digo cr�tico | Proyectos C11+ modernos |
+| Feature | Pattern | Builder | Generic |
+|---------|---------|---------|---------|
+| **Type Safety** | Runtime only | Compile-time | Compile-time + Runtime |
+| **Variadic Functions** | Yes | No | Yes (with _Generic) |
+| **Memory Overhead** | Low | Internal buffer | Low |
+| **Flexibility** | High | Limited | High |
+| **Ease of Use** | Very easy | Moderate | Easy |
+| **Required C Standard** | C99 | C99 | C11 |
+| **Error Messages** | Runtime | Compile-time | Both |
+| **Syntax** | Compact | Verbose | Compact |
+| **Ideal Use Case** | General use | Critical code | Modern C11+ projects |
 
-### �Cu�l API elegir?
+### ¿Cuál API Elegir?
 
-- **API de Patrones**: Para la mayor�a de proyectos. Simple, flexible y potente.
-- **API Constructor**: Para c�digo que requiere m�xima seguridad de tipos y validaci�n en compilaci�n.
-- **API Gen�rica**: Para proyectos modernos en C11+ que quieren lo mejor de ambos mundos.
+- **API de Patrones**: Para la mayoría de los proyectos. Simple, flexible y poderosa.
+- **API de Builder**: Para código que requiere máxima seguridad de tipos y validación en tiempo de compilación.
+- **API Genérica**: Para proyectos modernos en C11+ que quieran lo mejor de ambos mundos.
 
 ---
 
-## Instalaci�n
+## Instalación
 
 ### Requisitos
 
 - **CMake** 3.15 o superior
-- **Compilador C** con soporte C99 (C11 para API gen�rica)
-- **Compilador C++** (opcional, para compatibilidad C++)
+- **Compilador C** con soporte para C99 (C11 para API Genérica)
+- **Compilador C++** (opcional, para compatibilidad con C++)
 
-### Compilaci�n e Instalaci�n
+### Construcción e Instalación
 
 ```bash
-# Clonar el repositorio
+# Clone the repository
 git clone https://github.com/carlos-sweb/c_print.git
 cd c_print
 
-# Crear directorio de compilaci�n
+# Create build directory
 mkdir build && cd build
 
-# Configurar con CMake
+# Configure with CMake
 cmake ..
 
-# Compilar
+# Compile
 make
 
-# Instalar (puede requerir sudo)
+# Install (may require sudo)
 sudo make install
 ```
 
-### Opciones de Compilaci�n
+### Opciones de Construcción
 
 ```bash
-# Compilar ejemplos (por defecto: ON)
+# Build examples (default: ON)
 cmake -DBUILD_EXAMPLES=ON ..
 
-# Compilar tests (por defecto: OFF)
+# Build tests (default: OFF)
 cmake -DBUILD_TESTS=ON ..
 
-# Especificar prefijo de instalaci�n
+# Specify installation prefix
 cmake -DCMAKE_INSTALL_PREFIX=/usr/local ..
 
-# Compilar todo
+# Build everything
 cmake -DBUILD_EXAMPLES=ON -DBUILD_TESTS=ON ..
 make
 ```
 
-### Usar con pkg-config
+### Uso con pkg-config
 
-Despu�s de instalar, puedes usar `pkg-config` para enlazar la biblioteca:
+Después de la instalación, puedes usar `pkg-config` para enlazar la biblioteca:
 
 ```bash
-# Ver flags de compilaci�n
+# View compilation flags
 pkg-config --cflags c_print
 
-# Ver flags de enlace
+# View linking flags
 pkg-config --libs c_print
 
-# Compilar un programa
-gcc mi_programa.c $(pkg-config --cflags --libs c_print) -o mi_programa
+# Compile a program
+gcc my_program.c $(pkg-config --cflags --libs c_print) -o my_program
 ```
 
 ---
 
 ## Uso en Proyectos
 
-### Opci�n 1: Usando CMake (Recomendado)
+### Opción 1: Usando CMake (Recomendada)
 
 ```cmake
 cmake_minimum_required(VERSION 3.15)
-project(mi_proyecto C)
+project(my_project C)
 
-# Buscar c_print
+# Find c_print
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(CPRINT REQUIRED c_print)
 
-add_executable(mi_programa main.c)
+add_executable(my_program main.c)
 
-# Enlazar c_print
-target_link_libraries(mi_programa ${CPRINT_LIBRARIES})
-target_include_directories(mi_programa PUBLIC ${CPRINT_INCLUDE_DIRS})
+# Link c_print
+target_link_libraries(my_program ${CPRINT_LIBRARIES})
+target_include_directories(my_program PUBLIC ${CPRINT_INCLUDE_DIRS})
 ```
 
-### Opci�n 2: Compilaci�n Manual
+### Opción 2: Compilación Manual
 
 ```bash
-# Con biblioteca compartida (instalada)
-gcc mi_programa.c -lc_print -o mi_programa
+# With shared library (installed)
+gcc my_program.c -lc_print -o my_program
 
-# Con biblioteca est�tica (instalada)
-gcc mi_programa.c -lc_print -static -o mi_programa
+# With static library (installed)
+gcc my_program.c -lc_print -static -o my_program
 
-# Con archivos fuente directamente
-gcc mi_programa.c src/*.c -Iinclude -o mi_programa
+# With source files directly
+gcc my_program.c src/*.c -Iinclude -o my_program
 ```
 
-### Opci�n 3: Incluir como Subm�dulo
+### Opción 3: Incluir como Submódulo
 
 ```bash
-# Agregar como subm�dulo de git
+# Add as git submodule
 git submodule add https://github.com/carlos-sweb/c_print.git libs/c_print
 
-# En tu CMakeLists.txt
+# In your CMakeLists.txt
 add_subdirectory(libs/c_print)
-target_link_libraries(mi_programa c_print)
+target_link_libraries(my_program c_print)
 ```
 
 ---
 
 ## Ejemplos Detallados
 
-### Ejemplo 1: Dashboard de Sistema
+### Ejemplo 1: Panel de Sistema
 
 ```c
 #include "c_print.h"
 
 int main() {
-    c_print("\n{s:*^60:cyan:bold}\n", " ESTADO DEL SISTEMA ");
+    c_print("\n{s:*^60:cyan:bold}\n", " SYSTEM STATUS ");
 
     c_print("{s:<20} [{s:bright_green:bold}]\n", "CPU", "OK");
     c_print("{s:<20} {d:,} MB ({f:.1%:yellow})\n",
-            "Memoria", 8192, 0.65);
+            "Memory", 8192, 0.65);
     c_print("{s:<20} {d:,} / {d:,} GB\n",
-            "Disco", 450, 1000);
+            "Disk", 450, 1000);
     c_print("{s:<20} {f:.2:green} ms\n",
-            "Latencia", 12.45);
+            "Latency", 12.45);
 
     c_print("{s:*^60:cyan}\n", "");
 
@@ -491,7 +491,7 @@ int main() {
 }
 ```
 
-### Ejemplo 2: Sistema de Logs
+### Ejemplo 2: Sistema de Registro
 
 ```c
 #include "c_print_builder.h"
@@ -531,10 +531,10 @@ void log_message(LogLevel level, const char* message) {
 }
 
 int main() {
-    log_message(LOG_INFO, "Iniciando aplicaci�n...");
-    log_message(LOG_SUCCESS, "Conexi�n establecida");
-    log_message(LOG_WARNING, "Cache casi lleno");
-    log_message(LOG_ERROR, "Fallo en autenticaci�n");
+    log_message(LOG_INFO, "Starting application...");
+    log_message(LOG_SUCCESS, "Connection established");
+    log_message(LOG_WARNING, "Cache nearly full");
+    log_message(LOG_ERROR, "Authentication failed");
     return 0;
 }
 ```
@@ -552,14 +552,14 @@ void print_table_row(const char* name, int id, double value) {
 }
 
 int main() {
-    C_PRINT("{s:=^60:bold}\n", " REPORTE DE VENTAS ");
+    C_PRINT("{s:=^60:bold}\n", " SALES REPORT ");
     C_PRINT("| {s:<20} | {s:>8} | {s:>12} |\n",
-            "Producto", "ID", "Precio");
+            "Product", "ID", "Price");
     C_PRINT("{s:-^60}\n", "");
 
     print_table_row("Laptop", 1001, 899.99);
     print_table_row("Mouse", 2034, 29.99);
-    print_table_row("Teclado", 3102, 79.50);
+    print_table_row("Keyboard", 3102, 79.50);
 
     C_PRINT("{s:=^60}\n", "");
     C_PRINT("Total: {s:$}{f:.2:bright_green:bold:,}\n", "", 1009.48);
@@ -574,104 +574,105 @@ int main() {
 
 ```
 c_print/
-   include/                      # Archivos de cabecera p�blicos
-      c_print.h                # API principal de patrones
-      c_print_builder.h        # API patr�n constructor
-      c_print_generic.h        # API gen�rica C11
-      ansi_codes.h             # C�digos ANSI
-      color_parser.h           # Parser de colores
-      pattern_parser.h         # Parser de patrones
-      number_formatter.h       # Formato de n�meros
-      text_alignment.h         # Alineaci�n de texto
-      string_utils.h           # Utilidades de strings
-   src/                         # Implementaciones
-      c_print.c               # Implementaci�n API patrones
-      c_print_builder.c       # Implementaci�n constructor
-      c_print_generic.c       # Implementaci�n gen�rica
-      c_print_safe.c          # Versiones seguras
-      pattern_parser.c
-      number_formatter.c
-      color_parser.c
-      text_alignment.c
-      ansi_codes.c
-      string_utils.c
-   test/                        # Ejemplos y tests
-      example.c               # Ejemplo API patrones
-      example_builder.c       # Ejemplo constructor
-      example_generic.c       # Ejemplo gen�rica
-      test_color_parser.c
-      test_number_formatter.c
-      test_text_alignment.c
-      test_builder.c
-      test_string_utils.c
-   CMakeLists.txt              # Configuraci�n CMake
-   c_print.pc.in               # Template pkg-config
-   compile_and_test.sh         # Script de compilaci�n
-   check_headers.sh            # Verificaci�n de headers
-   README.md                   # Este archivo
+├── include/                      # Public header files
+│   ├── c_print.h                # Main pattern API
+│   ├── c_print_builder.h        # Builder pattern API
+│   ├── c_print_generic.h        # Generic C11 API
+│   ├── ansi_codes.h             # ANSI codes
+│   ├── color_parser.h           # Color parser
+│   ├── pattern_parser.h         # Pattern parser
+│   ├── number_formatter.h       # Number formatting
+│   ├── text_alignment.h         # Text alignment
+│   └── string_utils.h           # String utilities
+├── src/                         # Implementations
+│   ├── c_print.c               # Pattern API implementation
+│   ├── c_print_builder.c       # Builder implementation
+│   ├── c_print_generic.c       # Generic implementation
+│   ├── c_print_safe.c          # Safe versions
+│   ├── pattern_parser.c
+│   ├── number_formatter.c
+│   ├── color_parser.c
+│   ├── text_alignment.c
+│   ├── ansi_codes.c
+│   └── string_utils.c
+├── test/                        # Examples and tests
+│   ├── example.c               # Pattern API example
+│   ├── example_builder.c       # Builder example
+│   ├── example_generic.c       # Generic example
+│   ├── test_color_parser.c
+│   ├── test_number_formatter.c
+│   ├── test_text_alignment.c
+│   ├── test_builder.c
+│   └── test_string_utils.c
+├── CMakeLists.txt              # CMake configuration
+├── c_print.pc.in               # pkg-config template
+├── compile_and_test.sh         # Compilation script
+├── check_headers.sh            # Header verification
+├── README.md                   # This file (English)
+└── README-es.md                # Spanish version
 ```
 
 ---
 
 ## Arquitectura Modular
 
-La biblioteca est� dise�ada con una arquitectura modular donde cada componente es independiente:
+La biblioteca está diseñada con una arquitectura modular donde cada componente es independiente:
 
-### M�dulos Core
+### Módulos Principales
 
-1. **ansi_codes** - Generaci�n de c�digos ANSI
-2. **color_parser** - Parseo de nombres de colores/estilos
-3. **pattern_parser** - Parseo de patrones `{tipo:specs}`
-4. **number_formatter** - Formato de n�meros (separadores, bases, padding)
-5. **text_alignment** - Alineaci�n de texto con relleno
-6. **string_utils** - Utilidades de strings
+1. **ansi_codes** - Generación de códigos ANSI
+2. **color_parser** - Análisis de nombres de colores/estilos
+3. **pattern_parser** - Análisis de patrones `{type:specs}`
+4. **number_formatter** - Formateo de números (separadores, bases, relleno)
+5. **text_alignment** - Alineación de texto con relleno
+6. **string_utils** - Utilidades de cadenas
 
 ### APIs de Alto Nivel
 
-1. **c_print** - API de patrones (usa todos los m�dulos)
-2. **c_print_builder** - API constructor (usa m�dulos seleccionados)
-3. **c_print_generic** - API gen�rica (wrapper sobre c_print con _Generic)
+1. **c_print** - API de Patrones (usa todos los módulos)
+2. **c_print_builder** - API de Builder (usa módulos seleccionados)
+3. **c_print_generic** - API Genérica (envoltura sobre c_print con _Generic)
 
 ---
 
 ## Compatibilidad
 
-### Est�ndares de C
+### Estándares C
 
-- **C99**:  API de Patrones, API Constructor
-- **C11**:  Todas las APIs (incluye _Generic)
-- **C++**:  Todas las APIs (con `extern "C"`)
+- **C99**: ✅ API de Patrones, API de Builder
+- **C11**: ✅ Todas las APIs (incluye _Generic)
+- **C++**: ✅ Todas las APIs (con `extern "C"`)
 
 ### Plataformas
 
--  Linux
--  macOS
--  Windows (con soporte ANSI en Windows 10+)
--  BSD
+- ✅ Linux
+- ✅ macOS
+- ✅ Windows (con soporte ANSI en Windows 10+)
+- ✅ BSD
 
 ### Compiladores
 
--  GCC 4.9+
--  Clang 3.5+
--  MSVC 2019+ (con C11)
--  MinGW
+- ✅ GCC 4.9+
+- ✅ Clang 3.5+
+- ✅ MSVC 2019+ (con C11)
+- ✅ MinGW
 
 ---
 
-## Ejecutar Ejemplos
+## Ejecución de Ejemplos
 
-Despu�s de compilar:
+Después de construir:
 
 ```bash
 cd build
 
-# API de Patrones
+# Pattern API
 ./example_shared
 
-# API Constructor
+# Builder API
 ./example_builder
 
-# API Gen�rica (requiere C11)
+# Generic API (requires C11)
 ./example_generic
 
 # Tests
@@ -683,63 +684,63 @@ cd build
 
 ---
 
-## Soluci�n de Problemas
+## Solución de Problemas
 
-### Los colores no se muestran
+### Colores no se muestran
 
-**Problema**: El texto aparece con c�digos extra�os o sin colores.
+**Problema**: El texto aparece con códigos extraños o sin colores.
 
-**Soluci�n**:
-- En Linux/macOS: Aseg�rate de usar una terminal compatible con ANSI
+**Solución**:
+- En Linux/macOS: Asegúrate de usar una terminal compatible con ANSI
 - En Windows 10+: Habilita el soporte ANSI en la consola
-- Verifica que `TERM` est� configurado correctamente: `echo $TERM`
+- Verifica que `TERM` esté configurado correctamente: `echo $TERM`
 
-### Error de compilaci�n con API Gen�rica
+### Error de compilación con API Genérica
 
 **Problema**: Errores relacionados con `_Generic`.
 
-**Soluci�n**:
-- Aseg�rate de compilar con C11: `gcc -std=c11 ...`
+**Solución**:
+- Asegúrate de compilar con C11: `gcc -std=c11 ...`
 - Verifica que tu compilador soporte C11
 - Usa GCC 4.9+ o Clang 3.5+
 
-### S�mbolos no definidos al enlazar
+### Símbolos indefinidos al enlazar
 
 **Problema**: `undefined reference to 'c_print'`
 
-**Soluci�n**:
+**Solución**:
 ```bash
-# Aseg�rate de enlazar la biblioteca
-gcc programa.c -lc_print -o programa
+# Make sure to link the library
+gcc program.c -lc_print -o program
 
-# O usar pkg-config
-gcc programa.c $(pkg-config --cflags --libs c_print) -o programa
+# Or use pkg-config
+gcc program.c $(pkg-config --cflags --libs c_print) -o program
 ```
 
 ---
 
-## Contribuir
+## Contribuciones
 
 Las contribuciones son bienvenidas. Por favor:
 
-1. Haz fork del repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Haz commit de tus cambios (`git commit -am 'Agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
+1. Haz un fork del repositorio
+2. Crea una rama para tu característica (`git checkout -b feature/nueva-caracteristica`)
+3. Confirma tus cambios (`git commit -am 'Añade nueva característica'`)
+4. Empuja a la rama (`git push origin feature/nueva-caracteristica`)
 5. Crea un Pull Request
 
-### Gu�as de Contribuci�n
+### Guías de Contribución
 
-- Mantener la compatibilidad con C99 en APIs principales
-- Agregar tests para nuevas funcionalidades
-- Documentar en ingl�s en el c�digo, espa�ol en README
-- Seguir el estilo de c�digo existente
+- Mantén la compatibilidad con C99 en las APIs principales
+- Añade pruebas para nuevas características
+- Documenta en inglés en el código
+- Sigue el estilo de código existente
 
 ---
 
 ## Licencia
 
-Este proyecto est� licenciado bajo la Licencia MIT. Ver el archivo `LICENSE` para m�s detalles.
+Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo `LICENSE` para más detalles.
 
 ---
 
@@ -751,63 +752,63 @@ Este proyecto est� licenciado bajo la Licencia MIT. Ver el archivo `LICENSE` p
 
 ## Agradecimientos
 
-- Inspirado por bibliotecas de formato modernas como fmt, Rich y Chalk
-- Comunidad de C por feedback y contribuciones
-- Documentaci�n de ANSI escape codes
+- Inspirado en bibliotecas modernas de formateo como fmt, Rich y Chalk
+- Comunidad C por retroalimentación y contribuciones
+- Documentación de códigos de escape ANSI
 
 ---
 
-## Roadmap
+## Hoja de Ruta
 
-### v1.1 (Planeado)
+### v1.1 (Planeada)
 
-- [ ] Soporte para True Color (RGB 24-bit)
+- [ ] Soporte para True Color (RGB de 24 bits)
 - [ ] Temas personalizables
-- [ ] Detecci�n autom�tica de capacidades de terminal
-- [ ] Tablas autom�ticas con bordes
+- [ ] Detección automática de capacidades de terminal
+- [ ] Tablas automáticas con bordes
 - [ ] Barras de progreso
 - [ ] Spinners animados
 
-### v1.2 (Futuro)
+### v1.2 (Futura)
 
 - [ ] Soporte para Windows sin ANSI usando WinAPI
-- [ ] Logging estructurado integrado
-- [ ] Perfiles de rendimiento
-- [ ] Bindings para otros lenguajes (Python, Rust)
+- [ ] Registro estructurado integrado
+- [ ] Perfilamiento de rendimiento
+- [ ] Enlaces para otros lenguajes (Python, Rust)
 
 ---
 
 ## Preguntas Frecuentes (FAQ)
 
-### �Puedo usar esta biblioteca en proyectos comerciales?
+### ¿Puedo usar esta biblioteca en proyectos comerciales?
 
-S�, la licencia MIT permite uso comercial sin restricciones.
+Sí, la licencia MIT permite el uso comercial sin restricciones.
 
-### �Funciona en Windows?
+### ¿Funciona en Windows?
 
-S�, en Windows 10+ que tiene soporte nativo para c�digos ANSI. En versiones anteriores, necesitar�as habilitar ANSI o usar una alternativa como ConEmu.
+Sí, en Windows 10+ que tiene soporte nativo para códigos ANSI. En versiones anteriores, necesitarías habilitar ANSI o usar una alternativa como ConEmu.
 
-### �Cu�l es el overhead de rendimiento?
+### ¿Cuál es la sobrecarga de rendimiento?
 
-El overhead es m�nimo. El parseo de patrones ocurre una vez por llamada y el API constructor tiene costo casi nulo.
+La sobrecarga es mínima. El análisis de patrones ocurre una vez por llamada y la API de Builder tiene un costo casi cero.
 
-### �Puedo mezclar las tres APIs en el mismo proyecto?
+### ¿Puedo mezclar las tres APIs en el mismo proyecto?
 
-S�, las tres APIs son compatibles y pueden usarse simult�neamente en el mismo programa.
+Sí, las tres APIs son compatibles y se pueden usar simultáneamente en el mismo programa.
 
-### �Hay alternativas a esta biblioteca?
+### ¿Hay alternativas a esta biblioteca?
 
-S�, algunas alternativas incluyen:
-- **termcolor** (solo colores b�sicos)
+Sí, algunas alternativas incluyen:
+- **termcolor** (solo colores básicos)
 - **rang** (C++)
 - **colorama** (Python)
-- Esta biblioteca ofrece m�s caracter�sticas y flexibilidad que la mayor�a de alternativas en C.
+- Esta biblioteca ofrece más características y flexibilidad que la mayoría de las alternativas en C.
 
 ---
 
 ## Ejemplos Adicionales
 
-### Progress Bar
+### Barra de Progreso
 
 ```c
 #include "c_print.h"
@@ -815,9 +816,9 @@ S�, algunas alternativas incluyen:
 void show_progress(double percent) {
     int filled = (int)(percent * 40);
     c_print("[{s:green}", "");
-    for(int i = 0; i < filled; i++) c_print("�", "");
+    for(int i = 0; i < filled; i++) c_print("█", "");
     c_print("{s:dim}", "");
-    for(int i = filled; i < 40; i++) c_print("�", "");
+    for(int i = filled; i < 40; i++) c_print("░", "");
     c_print("{s}] {f:.1%}\r", "", percent);
     fflush(stdout);
 }
@@ -832,24 +833,24 @@ int main() {
 }
 ```
 
-### Sistema de Men�
+### Sistema de Menú
 
 ```c
 #include "c_print.h"
 
 void print_menu() {
-    c_print("\n{s:=^50:cyan:bold}\n", " MEN� PRINCIPAL ");
-    c_print("{s:bright_white:bold} {d}. {s}\n", "", 1, "Nueva partida");
-    c_print("{s:bright_white:bold} {d}. {s}\n", "", 2, "Cargar partida");
-    c_print("{s:bright_white:bold} {d}. {s}\n", "", 3, "Opciones");
-    c_print("{s:bright_white:bold} {d}. {s}\n", "", 4, "Salir");
+    c_print("\n{s:=^50:cyan:bold}\n", " MAIN MENU ");
+    c_print("{s:bright_white:bold} {d}. {s}\n", "", 1, "New Game");
+    c_print("{s:bright_white:bold} {d}. {s}\n", "", 2, "Load Game");
+    c_print("{s:bright_white:bold} {d}. {s}\n", "", 3, "Options");
+    c_print("{s:bright_white:bold} {d}. {s}\n", "", 4, "Exit");
     c_print("{s:=^50:cyan}\n", "");
-    c_print("Selecciona una opci�n: ", "");
+    c_print("Select an option: ", "");
 }
 
 int main() {
     print_menu();
-    // ... l�gica del men�
+    // ... menu logic
     return 0;
 }
 ```
@@ -864,5 +865,5 @@ int main() {
 ---
 
 <p align="center">
-  Hecho con {s:red:bold} en C
+  Made with {s:red:bold} in C
 </p>
