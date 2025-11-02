@@ -2,7 +2,7 @@
 
 **C library for printing colored and formatted text to the console using ANSI escape codes**
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yourusername/c_print)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/carlos-sweb/c_print)
 [![C Standard](https://img.shields.io/badge/C-C99%20%7C%20C11-orange.svg)](https://en.wikipedia.org/wiki/C11_(C_standard_revision))
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -372,7 +372,7 @@ int main() {
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/c_print.git
+git clone https://github.com/carlos-sweb/c_print.git
 cd c_print
 
 # Create build directory
@@ -458,7 +458,7 @@ gcc my_program.c src/*.c -Iinclude -o my_program
 
 ```bash
 # Add as git submodule
-git submodule add https://github.com/yourusername/c_print.git libs/c_print
+git submodule add https://github.com/carlos-sweb/c_print.git libs/c_print
 
 # In your CMakeLists.txt
 add_subdirectory(libs/c_print)
@@ -746,7 +746,7 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 
 ## Author
 
-**Your Name** - [GitHub](https://github.com/yourusername)
+**Carlos Illesca** - [GitHub](https://github.com/carlos-sweb)
 
 ---
 
@@ -859,9 +859,8 @@ int main() {
 
 ## Contact
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/c_print/issues)
-- **Email**: your-email@example.com
-- **Discord**: [Discord Server](#)
+- **Issues**: [GitHub Issues](https://github.com/carlos-sweb/c_print/issues)
+- **Email**: c4rl0sill3sc4@protonmail.com
 
 ---
 

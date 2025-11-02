@@ -2,7 +2,7 @@
 
 **Biblioteca en C para impresi�n de texto con colores y formato en la consola usando c�digos ANSI**
 
-[![Versi�n](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/yourusername/c_print)
+[![Versi�n](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/carlos-sweb/c_print)
 [![Est�ndar C](https://img.shields.io/badge/C-C99%20%7C%20C11-orange.svg)](https://en.wikipedia.org/wiki/C11_(C_standard_revision))
 [![Licencia](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -372,7 +372,7 @@ int main() {
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/yourusername/c_print.git
+git clone https://github.com/carlos-sweb/c_print.git
 cd c_print
 
 # Crear directorio de compilaci�n
@@ -458,7 +458,7 @@ gcc mi_programa.c src/*.c -Iinclude -o mi_programa
 
 ```bash
 # Agregar como subm�dulo de git
-git submodule add https://github.com/yourusername/c_print.git libs/c_print
+git submodule add https://github.com/carlos-sweb/c_print.git libs/c_print
 
 # En tu CMakeLists.txt
 add_subdirectory(libs/c_print)
@@ -745,7 +745,7 @@ Este proyecto est� licenciado bajo la Licencia MIT. Ver el archivo `LICENSE` p
 
 ## Autor
 
-**Tu Nombre** - [GitHub](https://github.com/yourusername)
+**Carlos Illesca** - [GitHub](https://github.com/carlos-sweb)
 
 ---
 
@@ -858,9 +858,8 @@ int main() {
 
 ## Contacto
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/c_print/issues)
-- **Email**: tu-email@example.com
-- **Discord**: [Servidor de Discord](#)
+- **Issues**: [GitHub Issues](https://github.com/carlos-sweb/c_print/issues)
+- **Email**: c4rl0sill3sc4@protonmail.com
 
 ---
 
