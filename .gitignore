@@ -1,1 +1,80 @@
-build
+# ============================================
+# Zig Build Artifacts
+# ============================================
+zig-cache/
+.zig-cache/
+zig-out/
+
+# ============================================
+# C/CMake Build Artifacts
+# ============================================
+build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+compile_commands.json
+CMakeUserPresets.json
+
+# ============================================
+# Compiled Objects & Libraries
+# ============================================
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+
+# ============================================
+# Project Executables
+# ============================================
+main
+test_*
+!test/*.zig
+!test/*.c
+!test/*.h
+example_*
+!example_*.zig
+system_dashboard
+
+# ============================================
+# Generated Files
+# ============================================
+graphify-out/
+*.pc
+
+# ============================================
+# IDE & Editor Files
+# ============================================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ============================================
+# Logs & Temporary Files
+# ============================================
+*.log
+*.tmp
+*.bak
+*.orig
+
+# ============================================
+# OS Generated Files
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
