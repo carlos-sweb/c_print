@@ -1,13 +1,13 @@
 /// example_generic.zig
 ///
-/// Demonstrates the generic API (c_print_generic).
+/// Demonstrates the generic API (z_print_generic).
 /// Equivalent to the C example_generic.c.
 ///
 /// The generic API uses Zig's comptime reflection to automatically
 /// detect argument types and validate them against format specifiers.
 const std = @import("std");
-const c_print = @import("c_print");
-const generic = c_print.c_print_generic;
+const z_print = @import("z_print");
+const generic = z_print.z_print_generic;
 
 pub fn main() !void {
     var buf: [4096]u8 = undefined;

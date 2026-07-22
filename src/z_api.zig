@@ -1,5 +1,5 @@
-/// C-ABI compatible wrapper functions for c_print library.
-/// These functions allow C code to use the c_print library via exported symbols.
+/// C-ABI compatible wrapper functions for z_print library.
+/// These functions allow C code to use the z_print library via exported symbols.
 const std = @import("std");
 
 /// ANSI escape codes for colors
@@ -31,7 +31,7 @@ fn colorToAnsi(color_code: c_int) []const u8 {
 /// Print a message with a color.
 /// color_code: 0=red, 1=green, 2=blue, 3=yellow, 4=cyan, 5=magenta, 6=white, 7=black
 /// Returns 0 on success, -1 on error.
-pub export fn c_print_color_msg(message: [*:0]const u8, color_code: c_int) callconv(.c) c_int {
+pub export fn z_print_color_msg(message: [*:0]const u8, color_code: c_int) callconv(.c) c_int {
     const msg: []const u8 = std.mem.span(message);
     const color: []const u8 = colorToAnsi(color_code);
     std.debug.print("{s}{s}{s}\n", .{ color, msg, RESET });
@@ -40,7 +40,7 @@ pub export fn c_print_color_msg(message: [*:0]const u8, color_code: c_int) callc
 
 /// Print a bold message.
 /// Returns 0 on success, -1 on error.
-pub export fn c_print_bold_msg(message: [*:0]const u8) callconv(.c) c_int {
+pub export fn z_print_bold_msg(message: [*:0]const u8) callconv(.c) c_int {
     const msg: []const u8 = std.mem.span(message);
     std.debug.print("{s}{s}{s}\n", .{ BOLD, msg, RESET });
     return 0;
@@ -48,13 +48,13 @@ pub export fn c_print_bold_msg(message: [*:0]const u8) callconv(.c) c_int {
 
 /// Print a simple string (no formatting).
 /// Returns 0 on success, -1 on error.
-pub export fn c_print_puts(message: [*:0]const u8) callconv(.c) c_int {
+pub export fn z_print_puts(message: [*:0]const u8) callconv(.c) c_int {
     const msg: []const u8 = std.mem.span(message);
     std.debug.print("{s}\n", .{msg});
     return 0;
 }
 
 /// Get library version string.
-pub export fn c_print_version() callconv(.c) [*:0]const u8 {
-    return "c_print 0.1.0 (Zig 0.16.0)";
+pub export fn z_print_version() callconv(.c) [*:0]const u8 {
+    return "z_print 0.1.0 (Zig 0.16.0)";
 }

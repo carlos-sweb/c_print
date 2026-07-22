@@ -3,8 +3,8 @@
 /// Demonstrates building a colored logging system using the builder API.
 /// Equivalent to the C "Example 2: Logging System".
 const std = @import("std");
-const c_print = @import("c_print");
-const bld = c_print.c_print_builder;
+const z_print = @import("z_print");
+const bld = z_print.z_print_builder;
 
 const LogLevel = enum {
     info,

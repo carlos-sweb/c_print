@@ -13,7 +13,7 @@ pub fn build(b: *std.Build) void {
 
     // Static library target
     const lib = b.addLibrary(.{
-        .name = "c_print",
+        .name = "z_print",
         .root_module = lib_mod,
         .linkage = .static,
     });
@@ -21,7 +21,7 @@ pub fn build(b: *std.Build) void {
 
     // Shared library target
     const lib_shared = b.addLibrary(.{
-        .name = "c_print",
+        .name = "z_print",
         .root_module = lib_mod,
         .linkage = .dynamic,
     });
@@ -49,7 +49,7 @@ pub fn build(b: *std.Build) void {
             .target = target,
             .optimize = optimize,
         });
-        exe_mod.addImport("c_print", lib_mod);
+        exe_mod.addImport("z_print", lib_mod);
 
         const exe = b.addExecutable(.{
             .name = "example_" ++ name,
@@ -67,7 +67,7 @@ pub fn build(b: *std.Build) void {
         "cc",
         "test/example_c_simple.c",
         "-L", "zig-out/lib",
-        "-lc_print",
+        "-lz_print",
         "-o", "zig-out/bin/example_c_simple",
     });
     c_compile.step.dependOn(&lib.step);
@@ -76,11 +76,11 @@ pub fn build(b: *std.Build) void {
     const c_example_step = b.step("example_c_simple", "Build C-ABI example");
     c_example_step.dependOn(&c_compile.step);
 
-    // C-ABI static example: link against libc_print.a (static library)
+    // C-ABI static example: link against libz_print.a (static library)
     const c_static_compile = b.addSystemCommand(&.{
         "cc",
         "test/example_c_simple.c",
-        "zig-out/lib/libc_print.a",
+        "zig-out/lib/libz_print.a",
         "-o", "zig-out/bin/static_example_c_simple",
     });
     c_static_compile.step.dependOn(&lib.step);
@@ -89,13 +89,13 @@ pub fn build(b: *std.Build) void {
     const c_static_example_step = b.step("static_example_c_simple", "Build C-ABI static example");
     c_static_example_step.dependOn(&c_static_compile.step);
 
-    // C-ABI shared example: link against libc_print.so (dynamic library)
+    // C-ABI shared example: link against libz_print.so (dynamic library)
     const c_shared_compile = b.addSystemCommand(&.{
         "cc",
         "test/example_c_simple.c",
         "-L", "zig-out/lib",
         "-Wl,-rpath,zig-out/lib",
-        "-lc_print",
+        "-lz_print",
         "-o", "zig-out/bin/share_example_c_simple",
     });
     c_shared_compile.step.dependOn(&lib_shared.step);

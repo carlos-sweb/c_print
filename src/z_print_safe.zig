@@ -1,4 +1,4 @@
-/// c_print_safe.zig - Safe variant of c_print with runtime validation
+/// z_print_safe.zig - Safe variant of z_print with runtime validation
 ///
 /// Adds runtime checks for:
 /// - Invalid char values (outside ASCII 0-127)
@@ -6,7 +6,7 @@
 /// - Visual error feedback (red bold error messages)
 ///
 const std = @import("std");
-const c_print_mod = @import("c_print.zig");
+const z_print_mod = @import("z_print.zig");
 const ansi_codes = @import("ansi_codes.zig");
 const color_parser = @import("color_parser.zig");
 const pattern_parser = @import("pattern_parser.zig");
@@ -52,7 +52,7 @@ fn countPatterns(pattern: []const u8) usize {
 // Core Safe Print Function
 // ============================================================================
 
-/// Safe variant of c_print with runtime validation.
+/// Safe variant of z_print with runtime validation.
 ///
 /// Scans `pattern` byte by byte. When `{type:spec...}` is found, parses the pattern,
 /// validates the corresponding argument from `args`, formats it, applies ANSI codes,
@@ -66,7 +66,7 @@ fn countPatterns(pattern: []const u8) usize {
 /// On validation failure, an error message is displayed in red bold text.
 /// Escaped braces `\{` output a literal `{`.
 /// `args` is a tuple of values matching the pattern's format types in order.
-pub fn c_print_safe(writer: *std.Io.Writer, pattern: []const u8, args: anytype) !void {
+pub fn z_print_safe(writer: *std.Io.Writer, pattern: []const u8, args: anytype) !void {
     if (pattern.len == 0) return;
 
     const NumArgs = @typeInfo(@TypeOf(args)).@"struct".fields.len;
@@ -88,7 +88,7 @@ pub fn c_print_safe(writer: *std.Io.Writer, pattern: []const u8, args: anytype) 
 
         if (pattern[i] == '{') {
             // Find closing brace
-            const end = c_print_mod.find_closing_brace(pattern, i);
+            const end = z_print_mod.find_closing_brace(pattern, i);
             if (end) |end_idx| {
                 const pat = pattern[i .. end_idx + 1];
                 var style: PatternStyle = undefined;
@@ -185,11 +185,11 @@ fn format_value_safe(writer: *std.Io.Writer, style: *const PatternStyle, arg: an
             writer.writeAll("{?}") catch {};
             return false;
         }
-    } else if (comptime c_print_mod.isSignedIntType(T)) {
+    } else if (comptime z_print_mod.isSignedIntType(T)) {
         return format_signed_int_safe(writer, style, arg, arg_idx);
-    } else if (comptime c_print_mod.isUnsignedIntType(T)) {
+    } else if (comptime z_print_mod.isUnsignedIntType(T)) {
         return format_unsigned_int_safe(writer, style, arg, arg_idx);
-    } else if (comptime c_print_mod.isFloatType(T)) {
+    } else if (comptime z_print_mod.isFloatType(T)) {
         return format_float_safe(writer, style, arg);
     } else {
         writer.writeAll("{?}") catch {};
@@ -202,7 +202,7 @@ fn format_signed_int_safe(writer: *std.Io.Writer, style: *const PatternStyle, ar
     switch (style.format_type) {
         'd', 'i' => {
             const val: i32 = @intCast(arg);
-            c_print_mod.format_int(writer, style, val) catch {};
+            z_print_mod.format_int(writer, style, val) catch {};
             return true;
         },
         'l' => {
@@ -284,7 +284,7 @@ fn format_unsigned_int_safe(writer: *std.Io.Writer, style: *const PatternStyle, 
         },
         'd', 'i' => {
             const val: i32 = @intCast(arg);
-            c_print_mod.format_int(writer, style, val) catch {};
+            z_print_mod.format_int(writer, style, val) catch {};
             return true;
         },
         'l' => {
@@ -307,7 +307,7 @@ fn format_unsigned_int_safe(writer: *std.Io.Writer, style: *const PatternStyle, 
 fn format_float_safe(writer: *std.Io.Writer, style: *const PatternStyle, arg: anytype) bool {
     if (style.format_type == 'f') {
         const val: f64 = @floatCast(arg);
-        c_print_mod.format_float(writer, style, val) catch {};
+        z_print_mod.format_float(writer, style, val) catch {};
         return true;
     } else {
         writer.writeAll("{?}") catch {};
@@ -360,127 +360,127 @@ test "countPatterns empty" {
     try std.testing.expectEqual(@as(usize, 0), countPatterns(""));
 }
 
-// -- Normal operation tests (should work like regular c_print) --
+// -- Normal operation tests (should work like regular z_print) --
 
-test "c_print_safe plain text no patterns" {
+test "z_print_safe plain text no patterns" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "Hello World", .{});
+    try z_print_safe(&writer, "Hello World", .{});
     try std.testing.expectEqualStrings("Hello World", writer.buffered());
 }
 
-test "c_print_safe empty pattern returns early" {
+test "z_print_safe empty pattern returns early" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "", .{});
+    try z_print_safe(&writer, "", .{});
     try std.testing.expectEqualStrings("", writer.buffered());
 }
 
-test "c_print_safe escaped brace" {
+test "z_print_safe escaped brace" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "\\{not a pattern}", .{});
+    try z_print_safe(&writer, "\\{not a pattern}", .{});
     try std.testing.expectEqualStrings("{not a pattern}", writer.buffered());
 }
 
-test "c_print_safe string format" {
+test "z_print_safe string format" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "Hello {s}!", .{"World"});
+    try z_print_safe(&writer, "Hello {s}!", .{"World"});
     try std.testing.expectEqualStrings("Hello World!", writer.buffered());
 }
 
-test "c_print_safe string with color" {
+test "z_print_safe string with color" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{s:red}", .{"Hi"});
+    try z_print_safe(&writer, "{s:red}", .{"Hi"});
     try std.testing.expectEqualStrings("\x1b[31mHi\x1b[0m", writer.buffered());
 }
 
-test "c_print_safe integer format" {
+test "z_print_safe integer format" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "val={d}", .{@as(i32, 42)});
+    try z_print_safe(&writer, "val={d}", .{@as(i32, 42)});
     try std.testing.expectEqualStrings("val=42", writer.buffered());
 }
 
-test "c_print_safe float format" {
+test "z_print_safe float format" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{f:.2}", .{@as(f64, 3.14)});
+    try z_print_safe(&writer, "{f:.2}", .{@as(f64, 3.14)});
     try std.testing.expectEqualStrings("3.14", writer.buffered());
 }
 
-test "c_print_safe char format valid" {
+test "z_print_safe char format valid" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{c}", .{@as(u8, 'A')});
+    try z_print_safe(&writer, "{c}", .{@as(u8, 'A')});
     try std.testing.expectEqualStrings("A", writer.buffered());
 }
 
-test "c_print_safe binary format" {
+test "z_print_safe binary format" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{b}", .{@as(u64, 5)});
+    try z_print_safe(&writer, "{b}", .{@as(u64, 5)});
     try std.testing.expectEqualStrings("101", writer.buffered());
 }
 
-test "c_print_safe hex format" {
+test "z_print_safe hex format" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{x}", .{@as(u64, 255)});
+    try z_print_safe(&writer, "{x}", .{@as(u64, 255)});
     try std.testing.expectEqualStrings("ff", writer.buffered());
 }
 
-test "c_print_safe octal format" {
+test "z_print_safe octal format" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{o}", .{@as(u64, 8)});
+    try z_print_safe(&writer, "{o}", .{@as(u64, 8)});
     try std.testing.expectEqualStrings("10", writer.buffered());
 }
 
-test "c_print_safe unsigned format" {
+test "z_print_safe unsigned format" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{u}", .{@as(u64, 42)});
+    try z_print_safe(&writer, "{u}", .{@as(u64, 42)});
     try std.testing.expectEqualStrings("42", writer.buffered());
 }
 
-test "c_print_safe long format" {
+test "z_print_safe long format" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{l}", .{@as(i64, 1234567890)});
+    try z_print_safe(&writer, "{l}", .{@as(i64, 1234567890)});
     try std.testing.expectEqualStrings("1234567890", writer.buffered());
 }
 
-test "c_print_safe multiple patterns" {
+test "z_print_safe multiple patterns" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "Name: {s}, Age: {d}", .{ "Alice", @as(i32, 30) });
+    try z_print_safe(&writer, "Name: {s}, Age: {d}", .{ "Alice", @as(i32, 30) });
     try std.testing.expectEqualStrings("Name: Alice, Age: 30", writer.buffered());
 }
 
-test "c_print_safe alignment" {
+test "z_print_safe alignment" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "|{s:<10}|", .{"Hi"});
+    try z_print_safe(&writer, "|{s:<10}|", .{"Hi"});
     try std.testing.expectEqualStrings("|Hi        |", writer.buffered());
 }
 
-test "c_print_safe integer with separator" {
+test "z_print_safe integer with separator" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{d:,}", .{@as(i32, 1234567)});
+    try z_print_safe(&writer, "{d:,}", .{@as(i32, 1234567)});
     try std.testing.expectEqualStrings("1,234,567", writer.buffered());
 }
 
 // -- Invalid char value tests --
 
-test "c_print_safe invalid char above 127" {
+test "z_print_safe invalid char above 127" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
     // 200 is outside ASCII range (0-127)
-    try c_print_safe(&writer, "{c}", .{@as(u8, 200)});
+    try z_print_safe(&writer, "{c}", .{@as(u8, 200)});
     const output = writer.buffered();
     // Should contain error message wrapped in red bold ANSI codes
     // Error message: {? invalid char: 200}
@@ -491,39 +491,39 @@ test "c_print_safe invalid char above 127" {
     try std.testing.expect(std.mem.indexOf(u8, output, "\x1b[0m") != null);
 }
 
-test "c_print_safe invalid char at boundary 128" {
+test "z_print_safe invalid char at boundary 128" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{c}", .{@as(u8, 128)});
+    try z_print_safe(&writer, "{c}", .{@as(u8, 128)});
     const output = writer.buffered();
     try std.testing.expect(std.mem.indexOf(u8, output, "invalid char: 128") != null);
 }
 
-test "c_print_safe valid char at boundary 127" {
+test "z_print_safe valid char at boundary 127" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{c}", .{@as(u8, 127)});
+    try z_print_safe(&writer, "{c}", .{@as(u8, 127)});
     // 127 is valid ASCII (DEL character), should output without error
     try std.testing.expect(std.mem.indexOf(u8, writer.buffered(), "invalid char") == null);
 }
 
-test "c_print_safe valid char at 0" {
+test "z_print_safe valid char at 0" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{c}", .{@as(u8, 0)});
+    try z_print_safe(&writer, "{c}", .{@as(u8, 0)});
     // 0 is valid ASCII (NUL), should output without error message
     try std.testing.expect(std.mem.indexOf(u8, writer.buffered(), "invalid char") == null);
 }
 
 // -- Suspicious pointer detection tests --
 
-test "c_print_safe suspicious string pointer" {
+test "z_print_safe suspicious string pointer" {
     var buf: [512]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
     // Create a slice with a suspicious low address pointer
     const fake_ptr: [*]const u8 = @ptrFromInt(0x100);
     const fake_str: []const u8 = fake_ptr[0..5];
-    try c_print_safe(&writer, "{s}", .{fake_str});
+    try z_print_safe(&writer, "{s}", .{fake_str});
     const output = writer.buffered();
     // Should contain error message about invalid pointer
     try std.testing.expect(std.mem.indexOf(u8, output, "expected string") != null or
@@ -533,34 +533,34 @@ test "c_print_safe suspicious string pointer" {
     try std.testing.expect(std.mem.indexOf(u8, output, "\x1b[0m") != null);
 }
 
-test "c_print_safe very low suspicious pointer shows as int" {
+test "z_print_safe very low suspicious pointer shows as int" {
     var buf: [512]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
     // A very low address (< 10000) should show "expected string, got int=..."
     const fake_ptr: [*]const u8 = @ptrFromInt(42);
     const fake_str: []const u8 = fake_ptr[0..1];
-    try c_print_safe(&writer, "{s}", .{fake_str});
+    try z_print_safe(&writer, "{s}", .{fake_str});
     const output = writer.buffered();
     try std.testing.expect(std.mem.indexOf(u8, output, "expected string, got int=42") != null);
 }
 
 // -- Error message visibility tests --
 
-test "c_print_safe error messages use red bold ANSI" {
+test "z_print_safe error messages use red bold ANSI" {
     var buf: [512]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
     // Trigger an error with invalid char
-    try c_print_safe(&writer, "{c}", .{@as(u8, 200)});
+    try z_print_safe(&writer, "{c}", .{@as(u8, 200)});
     const output = writer.buffered();
     // Red = \x1b[31m, Bold = \x1b[1m
     // Combined: \x1b[1;31m (bold + red)
     try std.testing.expect(std.mem.indexOf(u8, output, "\x1b[1;31m") != null);
 }
 
-test "c_print_safe error reset code present" {
+test "z_print_safe error reset code present" {
     var buf: [512]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{c}", .{@as(u8, 255)});
+    try z_print_safe(&writer, "{c}", .{@as(u8, 255)});
     const output = writer.buffered();
     // Must end with reset code
     try std.testing.expect(std.mem.indexOf(u8, output, "\x1b[0m") != null);
@@ -568,163 +568,163 @@ test "c_print_safe error reset code present" {
 
 // -- Valid inputs still work correctly --
 
-test "c_print_safe string with bg color" {
+test "z_print_safe string with bg color" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{s:bg_blue}", .{"X"});
+    try z_print_safe(&writer, "{s:bg_blue}", .{"X"});
     try std.testing.expectEqualStrings("\x1b[44mX\x1b[0m", writer.buffered());
 }
 
-test "c_print_safe string with all ANSI" {
+test "z_print_safe string with all ANSI" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{s:cyan:bg_black:bold}", .{"A"});
+    try z_print_safe(&writer, "{s:cyan:bg_black:bold}", .{"A"});
     try std.testing.expectEqualStrings("\x1b[1;36;40mA\x1b[0m", writer.buffered());
 }
 
-test "c_print_safe char with color" {
+test "z_print_safe char with color" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{c:red}", .{@as(u8, 'X')});
+    try z_print_safe(&writer, "{c:red}", .{@as(u8, 'X')});
     try std.testing.expectEqualStrings("\x1b[31mX\x1b[0m", writer.buffered());
 }
 
-test "c_print_safe integer with color" {
+test "z_print_safe integer with color" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{d:yellow}", .{@as(i32, 99)});
+    try z_print_safe(&writer, "{d:yellow}", .{@as(i32, 99)});
     try std.testing.expectEqualStrings("\x1b[33m99\x1b[0m", writer.buffered());
 }
 
-test "c_print_safe float with color" {
+test "z_print_safe float with color" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{f:.2:green}", .{@as(f64, 1.5)});
+    try z_print_safe(&writer, "{f:.2:green}", .{@as(f64, 1.5)});
     try std.testing.expectEqualStrings("\x1b[32m1.50\x1b[0m", writer.buffered());
 }
 
-test "c_print_safe hex with prefix" {
+test "z_print_safe hex with prefix" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{x:#}", .{@as(u64, 255)});
+    try z_print_safe(&writer, "{x:#}", .{@as(u64, 255)});
     try std.testing.expectEqualStrings("0xff", writer.buffered());
 }
 
-test "c_print_safe binary with prefix" {
+test "z_print_safe binary with prefix" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{b:#}", .{@as(u64, 5)});
+    try z_print_safe(&writer, "{b:#}", .{@as(u64, 5)});
     try std.testing.expectEqualStrings("0b101", writer.buffered());
 }
 
-test "c_print_safe octal with prefix" {
+test "z_print_safe octal with prefix" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{o:#}", .{@as(u64, 8)});
+    try z_print_safe(&writer, "{o:#}", .{@as(u64, 8)});
     try std.testing.expectEqualStrings("0o10", writer.buffered());
 }
 
-test "c_print_safe long with separator" {
+test "z_print_safe long with separator" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{l:,}", .{@as(i64, 1234567890)});
+    try z_print_safe(&writer, "{l:,}", .{@as(i64, 1234567890)});
     try std.testing.expectEqualStrings("1,234,567,890", writer.buffered());
 }
 
-test "c_print_safe unsigned with separator" {
+test "z_print_safe unsigned with separator" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{u:,}", .{@as(u64, 1234567)});
+    try z_print_safe(&writer, "{u:,}", .{@as(u64, 1234567)});
     try std.testing.expectEqualStrings("1,234,567", writer.buffered());
 }
 
-test "c_print_safe float percentage with precision" {
+test "z_print_safe float percentage with precision" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{f:.2:%}", .{@as(f64, 0.123)});
+    try z_print_safe(&writer, "{f:.2:%}", .{@as(f64, 0.123)});
     try std.testing.expectEqualStrings("12.30%", writer.buffered());
 }
 
-test "c_print_safe integer with zero padding" {
+test "z_print_safe integer with zero padding" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{d:05}", .{@as(i32, 42)});
+    try z_print_safe(&writer, "{d:05}", .{@as(i32, 42)});
     try std.testing.expectEqualStrings("00042", writer.buffered());
 }
 
-test "c_print_safe integer with show sign" {
+test "z_print_safe integer with show sign" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{d:+}", .{@as(i32, 42)});
+    try z_print_safe(&writer, "{d:+}", .{@as(i32, 42)});
     try std.testing.expectEqualStrings("+42", writer.buffered());
 }
 
-test "c_print_safe right alignment" {
+test "z_print_safe right alignment" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "|{s:>10}|", .{"Hi"});
+    try z_print_safe(&writer, "|{s:>10}|", .{"Hi"});
     try std.testing.expectEqualStrings("|        Hi|", writer.buffered());
 }
 
-test "c_print_safe center alignment" {
+test "z_print_safe center alignment" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "|{s:^10}|", .{"Hi"});
+    try z_print_safe(&writer, "|{s:^10}|", .{"Hi"});
     try std.testing.expectEqualStrings("|    Hi    |", writer.buffered());
 }
 
-test "c_print_safe center alignment with fill" {
+test "z_print_safe center alignment with fill" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "|{s:*^10}|", .{"Hi"});
+    try z_print_safe(&writer, "|{s:*^10}|", .{"Hi"});
     try std.testing.expectEqualStrings("|****Hi****|", writer.buffered());
 }
 
-test "c_print_safe multiple patterns with colors" {
+test "z_print_safe multiple patterns with colors" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{s:red}={d:blue}", .{ "X", @as(i32, 5) });
+    try z_print_safe(&writer, "{s:red}={d:blue}", .{ "X", @as(i32, 5) });
     try std.testing.expectEqualStrings("\x1b[31mX\x1b[0m=\x1b[34m5\x1b[0m", writer.buffered());
 }
 
-test "c_print_safe string empty" {
+test "z_print_safe string empty" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{s}", .{""});
+    try z_print_safe(&writer, "{s}", .{""});
     try std.testing.expectEqualStrings("", writer.buffered());
 }
 
-test "c_print_safe integer zero" {
+test "z_print_safe integer zero" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{d}", .{@as(i32, 0)});
+    try z_print_safe(&writer, "{d}", .{@as(i32, 0)});
     try std.testing.expectEqualStrings("0", writer.buffered());
 }
 
-test "c_print_safe pattern without closing brace" {
+test "z_print_safe pattern without closing brace" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "abc{s", .{"x"});
+    try z_print_safe(&writer, "abc{s", .{"x"});
     try std.testing.expectEqualStrings("abc{s", writer.buffered());
 }
 
-test "c_print_safe integer negative with separator" {
+test "z_print_safe integer negative with separator" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{d:,}", .{@as(i32, -1234567)});
+    try z_print_safe(&writer, "{d:,}", .{@as(i32, -1234567)});
     try std.testing.expectEqualStrings("-1,234,567", writer.buffered());
 }
 
-test "c_print_safe long negative" {
+test "z_print_safe long negative" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{l}", .{@as(i64, -42)});
+    try z_print_safe(&writer, "{l}", .{@as(i64, -42)});
     try std.testing.expectEqualStrings("-42", writer.buffered());
 }
 
-test "c_print_safe alignment with color" {
+test "z_print_safe alignment with color" {
     var buf: [256]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
-    try c_print_safe(&writer, "{s:<5:red}", .{"Hi"});
+    try z_print_safe(&writer, "{s:<5:red}", .{"Hi"});
     try std.testing.expectEqualStrings("\x1b[31mHi   \x1b[0m", writer.buffered());
 }

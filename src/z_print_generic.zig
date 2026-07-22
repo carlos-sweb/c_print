@@ -1,14 +1,14 @@
-/// c_print_generic.zig - Type-safe generic API for c_print
+/// z_print_generic.zig - Type-safe generic API for z_print
 ///
 /// Provides compile-time reflection to detect argument types, validate them
 /// against format specifiers, and provide debug utilities for type inspection.
 ///
 /// Usage:
-///   const generic = @import("c_print_generic.zig");
+///   const generic = @import("z_print_generic.zig");
 ///   generic.print(writer, "{s:red} {d:green}", .{ "Hello", @as(i32, 42) });
 ///   generic.debugTypes(writer, "{s} {d} {f}", .{ "test", @as(i32, 42), @as(f64, 3.14) });
 const std = @import("std");
-const c_print_mod = @import("c_print.zig");
+const z_print_mod = @import("z_print.zig");
 const pattern_parser = @import("pattern_parser.zig");
 
 const PatternStyle = pattern_parser.PatternStyle;
@@ -323,8 +323,8 @@ pub const printMaxArgs = 64;
 /// Usage:
 ///   print(writer, "{s:red} {d:green}", .{ "Hello", @as(i32, 42) });
 pub fn print(writer: *std.Io.Writer, comptime pattern: []const u8, args: anytype) !void {
-    // Delegate to the core c_print function which already handles type-safe formatting
-    try c_print_mod.c_print(writer, pattern, args);
+    // Delegate to the core z_print function which already handles type-safe formatting
+    try z_print_mod.z_print(writer, pattern, args);
 }
 
 /// Type-safe generic print with compile-time validation.
@@ -332,7 +332,7 @@ pub fn print(writer: *std.Io.Writer, comptime pattern: []const u8, args: anytype
 /// Useful for testing and debugging.
 pub fn printValidated(writer: *std.Io.Writer, comptime pattern: []const u8, args: anytype) ValidationResult {
     const result = comptime validateArgs(pattern, args);
-    c_print_mod.c_print(writer, pattern, args) catch {};
+    z_print_mod.z_print(writer, pattern, args) catch {};
     return result;
 }
 
@@ -397,11 +397,11 @@ pub fn debugValues(writer: *std.Io.Writer, comptime pattern: []const u8, args: a
             } else {
                 try writer.writeAll("false\n");
             }
-        } else if (comptime c_print_mod.isFloatType(T)) {
+        } else if (comptime z_print_mod.isFloatType(T)) {
             try writer.print("{d}\n", .{args[idx]});
-        } else if (comptime c_print_mod.isSignedIntType(T)) {
+        } else if (comptime z_print_mod.isSignedIntType(T)) {
             try writer.print("{d}\n", .{args[idx]});
-        } else if (comptime c_print_mod.isUnsignedIntType(T)) {
+        } else if (comptime z_print_mod.isUnsignedIntType(T)) {
             if (T == u8) {
                 try writer.print("'{c}'\n", .{args[idx]});
             } else {

@@ -1,10 +1,10 @@
 /**
- * c_print - Colored and formatted text printing library
+ * z_print - Colored and formatted text printing library
  * 
- * C-ABI compatible header for using c_print from C/C++ code.
+ * C-ABI compatible header for using z_print from C/C++ code.
  * 
  * Usage:
- *   cc example.c -L /usr/local/lib -lc_print -o example
+ *   cc example.c -L /usr/local/lib -lz_print -o example
  * 
  * Colors:
  *   0=red, 1=green, 2=blue, 3=yellow, 4=cyan, 5=magenta, 6=white, 7=black
@@ -25,7 +25,7 @@ extern "C" {
  *                    4=cyan, 5=magenta, 6=white, 7=black
  * @return 0 on success, -1 on error
  */
-int c_print_color_msg(const char *message, int color_code);
+int z_print_color_msg(const char *message, int color_code);
 
 /**
  * Print a bold message.
@@ -33,7 +33,7 @@ int c_print_color_msg(const char *message, int color_code);
  * @param message  The text to print (null-terminated string)
  * @return 0 on success, -1 on error
  */
-int c_print_bold_msg(const char *message);
+int z_print_bold_msg(const char *message);
 
 /**
  * Print a simple string (no formatting).
@@ -41,14 +41,14 @@ int c_print_bold_msg(const char *message);
  * @param message  The text to print (null-terminated string)
  * @return 0 on success, -1 on error
  */
-int c_print_puts(const char *message);
+int z_print_puts(const char *message);
 
 /**
  * Get library version string.
  * 
- * @return Version string (e.g., "c_print 0.1.0 (Zig 0.16.0)")
+ * @return Version string (e.g., "z_print 0.1.0 (Zig 0.16.0)")
  */
-const char *c_print_version(void);
+const char *z_print_version(void);
 
 #ifdef __cplusplus
 }

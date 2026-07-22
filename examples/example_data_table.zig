@@ -3,8 +3,8 @@
 /// Demonstrates building a formatted data table using the generic API.
 /// Equivalent to the C "Example 3: Data Table".
 const std = @import("std");
-const c_print = @import("c_print");
-const generic = c_print.c_print_generic;
+const z_print = @import("z_print");
+const generic = z_print.z_print_generic;
 
 const Product = struct {
     name: []const u8,

@@ -1,13 +1,13 @@
 /// example_builder.zig
 ///
-/// Demonstrates the builder pattern API (c_print_builder).
+/// Demonstrates the builder pattern API (z_print_builder).
 /// Equivalent to the C example_builder.c.
 ///
 /// The builder API provides type-safe, chainable formatting without
 /// format strings. Each value is added explicitly with its type.
 const std = @import("std");
-const c_print = @import("c_print");
-const bld = c_print.c_print_builder;
+const z_print = @import("z_print");
+const bld = z_print.z_print_builder;
 
 pub fn main() !void {
     const allocator = std.heap.page_allocator;
