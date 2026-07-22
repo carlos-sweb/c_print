@@ -1,0 +1,63 @@
+{
+  "schema_version": 2,
+  "active_work_id": "zig-migration-cleanup-4a27bc60",
+  "works": {
+    "zig-migration-cleanup-4a27bc60": {
+      "work_id": "zig-migration-cleanup-4a27bc60",
+      "active_plan": "/home/sweb/c_print/.omo/plans/zig-migration-cleanup.md",
+      "plan_name": "zig-migration-cleanup",
+      "status": "active",
+      "started_at": "2026-07-21T19:31:51.071Z",
+      "updated_at": "2026-07-21T19:37:18.407Z",
+      "session_ids": [
+        "opencode:ses_079f297bcffeHQL5LV4M3MNUrA"
+      ],
+      "session_origins": {
+        "opencode:ses_079f297bcffeHQL5LV4M3MNUrA": "direct"
+      },
+      "agent": "atlas",
+      "task_sessions": {
+        "todo:1": {
+          "task_key": "todo:1",
+          "task_label": "1",
+          "task_title": "D1: Remove legacy API functions from c_print.zig",
+          "session_id": "opencode:ses_079d3ee5dffeRLVpz2jgIHFIsk",
+          "agent": "Sisyphus-Junior",
+          "category": "quick",
+          "updated_at": "2026-07-21T19:37:18.407Z",
+          "started_at": "2026-07-21T19:36:56.980Z",
+          "status": "completed",
+          "ended_at": "2026-07-21T19:37:18.407Z",
+          "elapsed_ms": 21427
+        }
+      }
+    }
+  },
+  "active_plan": "/home/sweb/c_print/.omo/plans/zig-migration-cleanup.md",
+  "started_at": "2026-07-21T19:31:51.071Z",
+  "status": "active",
+  "updated_at": "2026-07-21T19:37:18.407Z",
+  "session_ids": [
+    "opencode:ses_079f297bcffeHQL5LV4M3MNUrA"
+  ],
+  "session_origins": {
+    "opencode:ses_079f297bcffeHQL5LV4M3MNUrA": "direct"
+  },
+  "plan_name": "zig-migration-cleanup",
+  "task_sessions": {
+    "todo:1": {
+      "task_key": "todo:1",
+      "task_label": "1",
+      "task_title": "D1: Remove legacy API functions from c_print.zig",
+      "session_id": "opencode:ses_079d3ee5dffeRLVpz2jgIHFIsk",
+      "agent": "Sisyphus-Junior",
+      "category": "quick",
+      "updated_at": "2026-07-21T19:37:18.407Z",
+      "started_at": "2026-07-21T19:36:56.980Z",
+      "status": "completed",
+      "ended_at": "2026-07-21T19:37:18.407Z",
+      "elapsed_ms": 21427
+    }
+  },
+  "agent": "atlas"
+}

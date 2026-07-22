@@ -1,0 +1,7 @@
+.{
+    .name = .c_print,
+    .version = "0.1.0",
+    .fingerprint = 0x91eb85f1ad65fb8,
+    .paths = .{ "src", "build.zig" },
+    .dependencies = .{},
+}

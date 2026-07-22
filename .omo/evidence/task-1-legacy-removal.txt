@@ -1,0 +1,29 @@
+=== Task 1: Legacy API Removal - Verification Evidence ===
+Date: 2026-07-21
+
+--- 1. Grep for removed symbols in src/c_print.zig ---
+$ grep -n "c_print_styled\|c_print_color\|c_print_bg\|c_print_style\|c_print_full\|c_printf_styled\|PrintOptions" src/c_print.zig
+Result: No matches found (PASS)
+
+--- 2. zig build test ---
+$ zig build test
+Result: All tests pass (PASS)
+
+--- 3. zig build ---
+$ zig build
+Result: Build succeeds (PASS)
+
+--- Removed items ---
+- PrintOptions struct (was line 15-19)
+- c_print_styled function (was line 467-471)
+- c_print_color function (was line 474-476)
+- c_print_bg function (was line 479-481)
+- c_print_style function (was line 484-486)
+- c_print_full function (was line 489-491)
+- c_printf_styled function (was line 495-499)
+- 8 legacy tests from src/c_print.zig (was lines 914-976)
+- 8 legacy tests from src/test_pattern_api.zig (was lines 1279-1346)
+
+--- Files modified ---
+- src/c_print.zig: Removed PrintOptions struct, 6 legacy functions, 8 legacy tests
+- src/test_pattern_api.zig: Removed 8 legacy parity tests
