@@ -34,11 +34,16 @@ CMakeUserPresets.json
 # ============================================
 main
 test_*
+!test_*.zig
+!test_*.c
+!test_*.h
 !test/*.zig
 !test/*.c
 !test/*.h
 example_*
 !example_*.zig
+!example_*.c
+!example_*.h
 system_dashboard
 
 # ============================================

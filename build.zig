@@ -62,6 +62,15 @@ pub fn build(b: *std.Build) void {
         example_step.dependOn(&run_exe.step);
     }
 
+    // The C compile steps below write straight to a hardcoded
+    // "zig-out/bin/..." path via a raw system command (not through Zig's
+    // own output-file/install-dir machinery), so nothing else guarantees
+    // that directory exists yet -- `zig build install` only populates
+    // zig-out/lib (from the two library artifacts above). Ensure it once
+    // and have every C-ABI example step depend on this, not just the
+    // library.
+    const mkdir_bin = b.addSystemCommand(&.{ "mkdir", "-p", "zig-out/bin" });
+
     // C-ABI example: compile C code using system command and link against the static library
     const c_compile = b.addSystemCommand(&.{
         "cc",
@@ -72,6 +81,7 @@ pub fn build(b: *std.Build) void {
     });
     c_compile.step.dependOn(&lib.step);
     c_compile.step.dependOn(b.getInstallStep());
+    c_compile.step.dependOn(&mkdir_bin.step);
 
     const c_example_step = b.step("example_c_simple", "Build C-ABI example");
     c_example_step.dependOn(&c_compile.step);
@@ -85,6 +95,7 @@ pub fn build(b: *std.Build) void {
     });
     c_static_compile.step.dependOn(&lib.step);
     c_static_compile.step.dependOn(b.getInstallStep());
+    c_static_compile.step.dependOn(&mkdir_bin.step);
 
     const c_static_example_step = b.step("static_example_c_simple", "Build C-ABI static example");
     c_static_example_step.dependOn(&c_static_compile.step);
@@ -100,6 +111,7 @@ pub fn build(b: *std.Build) void {
     });
     c_shared_compile.step.dependOn(&lib_shared.step);
     c_shared_compile.step.dependOn(b.getInstallStep());
+    c_shared_compile.step.dependOn(&mkdir_bin.step);
 
     const c_shared_example_step = b.step("share_example_c_simple", "Build C-ABI shared example");
     c_shared_example_step.dependOn(&c_shared_compile.step);

@@ -1,8 +1,8 @@
-# c_print
+# z-print
 
 **Zig library for printing colored and formatted text to the console using ANSI escape codes**
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/carlos-sweb/c_print)
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/carlos-sweb/z-print)
 [![Zig](https://img.shields.io/badge/Zig-0.16.0-orange.svg)](https://ziglang.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -10,7 +10,7 @@ English
 
 ## Description
 
-`c_print` is a comprehensive Zig library that provides three distinct approaches for printing formatted and colored text to the terminal. With support for ANSI colors, text styles, advanced alignment, and number formatting, the library offers flexibility for different use cases and programming preferences.
+`z_print` is a comprehensive Zig library that provides three distinct approaches for printing formatted and colored text to the terminal. With support for ANSI colors, text styles, advanced alignment, and number formatting, the library offers flexibility for different use cases and programming preferences.
 
 Built entirely in Zig 0.16.0, taking advantage of comptime type safety, the `std.Io.Writer` API, and Zig's powerful compile-time reflection. C users can integrate the library via the C-ABI compatible exported functions.
 
@@ -32,16 +32,16 @@ Built entirely in Zig 0.16.0, taking advantage of comptime type safety, the `std
 
 ### 1. Pattern-Based API (Recommended)
 
-**Module:** `c_print.zig`
+**Module:** `z_print.zig`
 
 This is the main and most flexible approach, using format patterns with `{type:specifier1:specifier2:...}` syntax. Arguments are passed as a comptime tuple, giving full type safety at compile time.
 
 #### Basic Syntax
 
 ```zig
-const c_print = @import("c_print");
+const z_print = @import("z_print");
 
-try c_print.c_print_mod.c_print(&writer, "Text with {type:specifiers}", .{value});
+try z_print.z_print_mod.z_print(&writer, "Text with {type:specifiers}", .{value});
 ```
 
 #### Supported Types
@@ -91,37 +91,37 @@ try c_print.c_print_mod.c_print(&writer, "Text with {type:specifiers}", .{value}
 
 ```zig
 const std = @import("std");
-const c_print = @import("c_print");
+const z_print = @import("z_print");
 
 pub fn main() !void {
     var stdout: std.Io.Writer = .fixed(&std.io.getStdOut().writer().buffer);
 
     // Simple colored text
-    try c_print.c_print_mod.c_print(&stdout, "Hello {s:green}!\n", .{"World"});
+    try z_print.z_print_mod.z_print(&stdout, "Hello {s:green}!\n", .{"World"});
 
     // Multiple specifiers
-    try c_print.c_print_mod.c_print(&stdout, "{s:cyan:bg_black:bold}\n", .{"IMPORTANT"});
+    try z_print.z_print_mod.z_print(&stdout, "{s:cyan:bg_black:bold}\n", .{"IMPORTANT"});
 
     // Multiple values
-    try c_print.c_print_mod.c_print(
+    try z_print.z_print_mod.z_print(
         &stdout,
         "User: {s:yellow}, Age: {d:blue}, Score: {f:.2:green}\n",
         .{ "Alice", @as(i32, 25), @as(f64, 95.5) },
     );
 
     // Number formatting
-    try c_print.c_print_mod.c_print(&stdout, "Population: {d:,}\n", .{@as(i32, 1234567)});
-    try c_print.c_print_mod.c_print(&stdout, "Hex: 0x{x:bold}\n", .{@as(u64, 255)});
-    try c_print.c_print_mod.c_print(&stdout, "Price: ${f:.2:,}\n", .{@as(f64, 1234.56)});
+    try z_print.z_print_mod.z_print(&stdout, "Population: {d:,}\n", .{@as(i32, 1234567)});
+    try z_print.z_print_mod.z_print(&stdout, "Hex: 0x{x:bold}\n", .{@as(u64, 255)});
+    try z_print.z_print_mod.z_print(&stdout, "Price: ${f:.2:,}\n", .{@as(f64, 1234.56)});
 
     // Alignment
-    try c_print.c_print_mod.c_print(&stdout, "|{s:<20}|\n", .{"Left"});
-    try c_print.c_print_mod.c_print(&stdout, "|{s:>20}|\n", .{"Right"});
-    try c_print.c_print_mod.c_print(&stdout, "|{s:^20}|\n", .{"Center"});
-    try c_print.c_print_mod.c_print(&stdout, "|{s:*^20}|\n", .{"Fill"});
+    try z_print.z_print_mod.z_print(&stdout, "|{s:<20}|\n", .{"Left"});
+    try z_print.z_print_mod.z_print(&stdout, "|{s:>20}|\n", .{"Right"});
+    try z_print.z_print_mod.z_print(&stdout, "|{s:^20}|\n", .{"Center"});
+    try z_print.z_print_mod.z_print(&stdout, "|{s:*^20}|\n", .{"Fill"});
 
     // Complex example
-    try c_print.c_print_mod.c_print(
+    try z_print.z_print_mod.z_print(
         &stdout,
         "[{s:bright_green:bold}] {s:white} - {f:.2:green} ms\n",
         .{ "SUCCESS", "Request completed", @as(f64, 45.32) },
@@ -144,14 +144,14 @@ pub fn main() !void {
 
 ### 2. Builder Pattern API
 
-**Module:** `c_print_builder.zig`
+**Module:** `z_print_builder.zig`
 
 This approach eliminates variadic functions entirely, providing complete compile-time type safety through explicit functions for each data type. The builder accumulates formatted output in an internal buffer, then prints or returns the result.
 
 #### Main Functions
 
 ```zig
-const Builder = c_print.c_print_builder;
+const Builder = z_print.z_print_builder;
 
 // Create and free
 var b = Builder.init(allocator);         // Create builder (alias: cp_new)
@@ -199,8 +199,8 @@ defer allocator.free(str);
 
 ```zig
 const std = @import("std");
-const c_print = @import("c_print");
-const Builder = c_print.c_print_builder;
+const z_print = @import("z_print");
+const Builder = z_print.z_print_builder;
 
 pub fn main() !void {
     const allocator = std.heap.page_allocator;
@@ -254,14 +254,14 @@ pub fn main() !void {
 
 ### 3. Generic API (Comptime Type Detection)
 
-**Module:** `c_print_generic.zig`
+**Module:** `z_print_generic.zig`
 
 This approach uses Zig's compile-time reflection (`@typeInfo`) to automatically detect argument types, validate them against format specifiers at comptime, and provide debug utilities for type inspection.
 
 #### Main Function
 
 ```zig
-const generic = c_print.c_print_generic;
+const generic = z_print.z_print_generic;
 
 try generic.C_PRINT(&writer, "{s:red} {d:green}", .{ "Hello", @as(i32, 42) });
 ```
@@ -278,8 +278,8 @@ try generic.C_PRINT(&writer, "{s:red} {d:green}", .{ "Hello", @as(i32, 42) });
 
 ```zig
 const std = @import("std");
-const c_print = @import("c_print");
-const generic = c_print.c_print_generic;
+const z_print = @import("z_print");
+const generic = z_print.z_print_generic;
 
 pub fn main() !void {
     var buf: [4096]u8 = undefined;
@@ -364,8 +364,8 @@ pub fn main() !void {
 
 ```bash
 # Clone the repository
-git clone https://github.com/carlos-sweb/c_print.git
-cd c_print
+git clone https://github.com/carlos-sweb/z-print.git
+cd z_print
 
 # Build the static library
 zig build
@@ -376,15 +376,15 @@ zig build test
 
 ### Using as a Dependency
 
-Add `c_print` to your `build.zig.zon` dependencies:
+Add `z_print` to your `build.zig.zon` dependencies:
 
 ```zig
 .{
     .name = .my_project,
     .version = "0.1.0",
     .dependencies = .{
-        .c_print = .{
-            .url = "https://github.com/carlos-sweb/c_print/archive/refs/heads/main.tar.gz",
+        .z_print = .{
+            .url = "https://github.com/carlos-sweb/z-print/archive/refs/heads/main.tar.gz",
             .hash = "...",
         },
     },
@@ -394,7 +394,7 @@ Add `c_print` to your `build.zig.zon` dependencies:
 Then in your `build.zig`:
 
 ```zig
-const c_print_dep = b.dependency("c_print", .{
+const z_print_dep = b.dependency("z_print", .{
     .target = target,
     .optimize = optimize,
 });
@@ -408,7 +408,7 @@ const exe = b.addExecutable(.{
     }),
 });
 
-exe.root_module.addImport("c_print", c_print_dep.module("c_print"));
+exe.root_module.addImport("z_print", z_print_dep.module("z_print"));
 ```
 
 ---
@@ -418,24 +418,24 @@ exe.root_module.addImport("c_print", c_print_dep.module("c_print"));
 ### Option 1: As a Zig Module (Recommended)
 
 ```zig
-const c_print = @import("c_print");
+const z_print = @import("z_print");
 
 pub fn main() !void {
     var buf: [4096]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
 
     // Pattern API
-    try c_print.c_print_mod.c_print(&writer, "Hello {s:green}!\n", .{"World"});
+    try z_print.z_print_mod.z_print(&writer, "Hello {s:green}!\n", .{"World"});
 
     // Builder API
-    var b = c_print.c_print_builder.init(std.heap.page_allocator);
-    defer c_print.c_print_builder.deinit(&b);
-    _ = c_print.c_print_builder.withColorName(&b, "cyan")
+    var b = z_print.z_print_builder.init(std.heap.page_allocator);
+    defer z_print.z_print_builder.deinit(&b);
+    _ = z_print.z_print_builder.withColorName(&b, "cyan")
         .append("Hello from builder");
-    try c_print.c_print_builder.println(&b);
+    try z_print.z_print_builder.println(&b);
 
     // Generic API
-    try c_print.c_print_generic.C_PRINT(
+    try z_print.z_print_generic.C_PRINT(
         &writer,
         "Value: {d:yellow}\n",
         .{@as(i32, 42)},
@@ -446,17 +446,17 @@ pub fn main() !void {
 ### Option 2: Import Individual Modules
 
 ```zig
-const c_print_mod = @import("c_print.zig").c_print_mod;
-const c_print_builder = @import("c_print.zig").c_print_builder;
-const c_print_generic = @import("c_print.zig").c_print_generic;
+const z_print_mod = @import("z_print.zig").z_print_mod;
+const z_print_builder = @import("z_print.zig").z_print_builder;
+const z_print_generic = @import("z_print.zig").z_print_generic;
 ```
 
 ### Option 3: Direct File Import
 
 ```zig
-const c_print_mod = @import("c_print.zig");
-const builder = @import("c_print_builder.zig");
-const generic = @import("c_print_generic.zig");
+const z_print_mod = @import("z_print.zig");
+const builder = @import("z_print_builder.zig");
+const generic = @import("z_print_generic.zig");
 ```
 
 ---
@@ -467,33 +467,33 @@ const generic = @import("c_print_generic.zig");
 
 ```zig
 const std = @import("std");
-const c_print = @import("c_print");
-const cp = c_print.c_print_mod;
+const z_print = @import("z_print");
+const cp = z_print.z_print_mod;
 
 pub fn main() !void {
     var buf: [4096]u8 = undefined;
     var writer: std.Io.Writer = .fixed(&buf);
 
-    try cp.c_print(&writer, "\n{s:*^60:cyan:bold}\n", .{" SYSTEM STATUS "});
+    try cp.z_print(&writer, "\n{s:*^60:cyan:bold}\n", .{" SYSTEM STATUS "});
 
-    try cp.c_print(&writer, "{s:<20} [{s:bright_green:bold}]\n", .{ "CPU", "OK" });
-    try cp.c_print(
+    try cp.z_print(&writer, "{s:<20} [{s:bright_green:bold}]\n", .{ "CPU", "OK" });
+    try cp.z_print(
         &writer,
         "{s:<20} {d:,} MB ({f:.1%:yellow})\n",
         .{ "Memory", @as(i32, 8192), @as(f64, 0.65) },
     );
-    try cp.c_print(
+    try cp.z_print(
         &writer,
         "{s:<20} {d:,} / {d:,} GB\n",
         .{ "Disk", @as(i32, 450), @as(i32, 1000) },
     );
-    try cp.c_print(
+    try cp.z_print(
         &writer,
         "{s:<20} {f:.2:green} ms\n",
         .{ "Latency", @as(f64, 12.45) },
     );
 
-    try cp.c_print(&writer, "{s:*^60:cyan}\n", .{""});
+    try cp.z_print(&writer, "{s:*^60:cyan}\n", .{""});
 
     _ = try std.io.getStdOut().write(writer.buffered());
 }
@@ -503,8 +503,8 @@ pub fn main() !void {
 
 ```zig
 const std = @import("std");
-const c_print = @import("c_print");
-const Builder = c_print.c_print_builder;
+const z_print = @import("z_print");
+const Builder = z_print.z_print_builder;
 
 const LogLevel = enum {
     info,
@@ -545,8 +545,8 @@ pub fn main() !void {
 
 ```zig
 const std = @import("std");
-const c_print = @import("c_print");
-const generic = c_print.c_print_generic;
+const z_print = @import("z_print");
+const generic = z_print.z_print_generic;
 
 fn printTableRow(writer: *std.Io.Writer, name: []const u8, id: i32, value: f64) !void {
     try generic.C_PRINT(writer, "| {s:<20} | {d:>8:05} | {f:>12:.2:,} |\n", .{ name, id, value });
@@ -584,13 +584,13 @@ pub fn main() !void {
 ## Project Structure
 
 ```
-c_print/
+z_print/
 ├── src/                              # Zig source files
 │   ├── main.zig                     # Root module (re-exports all modules)
-│   ├── c_print.zig                  # Pattern API implementation
-│   ├── c_print_builder.zig          # Builder pattern API
-│   ├── c_print_generic.zig          # Generic comptime API
-│   ├── c_print_safe.zig             # Safe wrapper functions
+│   ├── z_print.zig                  # Pattern API implementation
+│   ├── z_print_builder.zig          # Builder pattern API
+│   ├── z_print_generic.zig          # Generic comptime API
+│   ├── z_print_safe.zig             # Safe wrapper functions
 │   ├── c_api.zig                    # C-ABI exported functions
 │   ├── ansi_codes.zig               # ANSI code generation
 │   ├── color_parser.zig             # Color/style name parser
@@ -630,9 +630,9 @@ The library is designed with a modular architecture where each component is inde
 
 ### High-Level APIs
 
-1. **c_print** - Pattern API (uses all core modules)
-2. **c_print_builder** - Builder API (uses selected core modules)
-3. **c_print_generic** - Generic API (comptime wrapper over c_print with type validation)
+1. **z_print** - Pattern API (uses all core modules)
+2. **z_print_builder** - Builder API (uses selected core modules)
+3. **z_print_generic** - Generic API (comptime wrapper over z_print with type validation)
 
 ---
 
@@ -655,22 +655,22 @@ The library is designed with a modular architecture where each component is inde
 
 ## C-ABI Compatibility
 
-The library exports C-ABI compatible functions that can be called from C code. This is useful for projects that want to use c_print from a C/C++ codebase.
+The library exports C-ABI compatible functions that can be called from C code. This is useful for projects that want to use z_print from a C/C++ codebase.
 
 ### Exported Functions
 
 ```c
 // Print a message with a color (0=red, 1=green, 2=blue, 3=yellow, 4=cyan, 5=magenta, 6=white, 7=black)
-int c_print_color_msg(const char *message, int color_code);
+int z_print_color_msg(const char *message, int color_code);
 
 // Print a bold message
-int c_print_bold_msg(const char *message);
+int z_print_bold_msg(const char *message);
 
 // Print a simple string (no formatting)
-int c_print_puts(const char *message);
+int z_print_puts(const char *message);
 
 // Get library version string
-const char *c_print_version(void);
+const char *z_print_version(void);
 ```
 
 ### Building the C Example
@@ -691,21 +691,21 @@ zig build example_c_simple
 ```c
 #include <stdio.h>
 
-extern int c_print_puts(const char *message);
-extern int c_print_color_msg(const char *message, int color_code);
-extern int c_print_bold_msg(const char *message);
+extern int z_print_puts(const char *message);
+extern int z_print_color_msg(const char *message, int color_code);
+extern int z_print_bold_msg(const char *message);
 
 int main(void) {
-    c_print_puts("Hello from C!");
-    c_print_color_msg("This is green text", 1);
-    c_print_bold_msg("This is bold text");
+    z_print_puts("Hello from C!");
+    z_print_color_msg("This is green text", 1);
+    z_print_bold_msg("This is bold text");
     return 0;
 }
 ```
 
 Compile and link:
 ```bash
-cc example.c -L zig-out/lib -lc_print -o example
+cc example.c -L zig-out/lib -lz_print -o example
 ```
 
 ---
@@ -755,10 +755,10 @@ zig build example_c_simple
 
 ```zig
 // Wrong: bare integer literal
-try c_print(&writer, "{d}", .{42});
+try z_print(&writer, "{d}", .{42});
 
 // Correct: explicit type
-try c_print(&writer, "{d}", .{@as(i32, 42)});
+try z_print(&writer, "{d}", .{@as(i32, 42)});
 ```
 
 ### Builder output not visible
@@ -867,22 +867,22 @@ Yes, some alternatives in the Zig ecosystem include:
 
 ```zig
 const std = @import("std");
-const c_print = @import("c_print");
-const cp = c_print.c_print_mod;
+const z_print = @import("z_print");
+const cp = z_print.z_print_mod;
 
 fn showProgress(writer: *std.Io.Writer, percent: f64) !void {
     const filled: usize = @intFromFloat(percent * 40);
-    try cp.c_print(writer, "[{s:green}", .{""});
+    try cp.z_print(writer, "[{s:green}", .{""});
     var i: usize = 0;
     while (i < filled) : (i += 1) {
         try writer.writeAll("█");
     }
-    try cp.c_print(writer, "{s:dim}", .{""});
+    try cp.z_print(writer, "{s:dim}", .{""});
     i = filled;
     while (i < 40) : (i += 1) {
         try writer.writeAll("░");
     }
-    try cp.c_print(writer, "{s}] {f:.1%}\r", .{ "", percent });
+    try cp.z_print(writer, "{s}] {f:.1%}\r", .{ "", percent });
 }
 
 pub fn main() !void {
@@ -904,17 +904,17 @@ pub fn main() !void {
 
 ```zig
 const std = @import("std");
-const c_print = @import("c_print");
-const cp = c_print.c_print_mod;
+const z_print = @import("z_print");
+const cp = z_print.z_print_mod;
 
 fn printMenu(writer: *std.Io.Writer) !void {
-    try cp.c_print(writer, "\n{s:=^50:cyan:bold}\n", .{" MAIN MENU "});
-    try cp.c_print(writer, "{s:bright_white:bold} {d}. {s}\n", .{ "", @as(i32, 1), "New Game" });
-    try cp.c_print(writer, "{s:bright_white:bold} {d}. {s}\n", .{ "", @as(i32, 2), "Load Game" });
-    try cp.c_print(writer, "{s:bright_white:bold} {d}. {s}\n", .{ "", @as(i32, 3), "Options" });
-    try cp.c_print(writer, "{s:bright_white:bold} {d}. {s}\n", .{ "", @as(i32, 4), "Exit" });
-    try cp.c_print(writer, "{s:=^50:cyan}\n", .{""});
-    try cp.c_print(writer, "Select an option: ", .{});
+    try cp.z_print(writer, "\n{s:=^50:cyan:bold}\n", .{" MAIN MENU "});
+    try cp.z_print(writer, "{s:bright_white:bold} {d}. {s}\n", .{ "", @as(i32, 1), "New Game" });
+    try cp.z_print(writer, "{s:bright_white:bold} {d}. {s}\n", .{ "", @as(i32, 2), "Load Game" });
+    try cp.z_print(writer, "{s:bright_white:bold} {d}. {s}\n", .{ "", @as(i32, 3), "Options" });
+    try cp.z_print(writer, "{s:bright_white:bold} {d}. {s}\n", .{ "", @as(i32, 4), "Exit" });
+    try cp.z_print(writer, "{s:=^50:cyan}\n", .{""});
+    try cp.z_print(writer, "Select an option: ", .{});
 }
 
 pub fn main() !void {
@@ -930,7 +930,7 @@ pub fn main() !void {
 
 ## Contact
 
-- **Issues**: [GitHub Issues](https://github.com/carlos-sweb/c_print/issues)
+- **Issues**: [GitHub Issues](https://github.com/carlos-sweb/z-print/issues)
 - **Email**: c4rl0sill3sc4@protonmail.com
 
 ---

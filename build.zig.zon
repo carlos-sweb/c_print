@@ -1,7 +1,7 @@
 .{
-    .name = .c_print,
+    .name = .z_print,
     .version = "0.1.0",
-    .fingerprint = 0x91eb85f1ad65fb8,
+    .fingerprint = 0xfb58614259158564,
     .paths = .{ "src", "build.zig" },
     .dependencies = .{},
 }
