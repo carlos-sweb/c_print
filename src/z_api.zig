@@ -1,6 +1,7 @@
 /// C-ABI compatible wrapper functions for z_print library.
 /// These functions allow C code to use the z_print library via exported symbols.
 const std = @import("std");
+const stdio = @import("stdio.zig");
 
 /// ANSI escape codes for colors
 const RESET = "\x1b[0m";
@@ -34,7 +35,7 @@ fn colorToAnsi(color_code: c_int) []const u8 {
 pub export fn z_print_color_msg(message: [*:0]const u8, color_code: c_int) callconv(.c) c_int {
     const msg: []const u8 = std.mem.span(message);
     const color: []const u8 = colorToAnsi(color_code);
-    std.debug.print("{s}{s}{s}\n", .{ color, msg, RESET });
+    stdio.writeStdoutParts(&.{ color, msg, RESET, "\n" }) catch return -1;
     return 0;
 }
 
@@ -42,7 +43,7 @@ pub export fn z_print_color_msg(message: [*:0]const u8, color_code: c_int) callc
 /// Returns 0 on success, -1 on error.
 pub export fn z_print_bold_msg(message: [*:0]const u8) callconv(.c) c_int {
     const msg: []const u8 = std.mem.span(message);
-    std.debug.print("{s}{s}{s}\n", .{ BOLD, msg, RESET });
+    stdio.writeStdoutParts(&.{ BOLD, msg, RESET, "\n" }) catch return -1;
     return 0;
 }
 
@@ -50,7 +51,18 @@ pub export fn z_print_bold_msg(message: [*:0]const u8) callconv(.c) c_int {
 /// Returns 0 on success, -1 on error.
 pub export fn z_print_puts(message: [*:0]const u8) callconv(.c) c_int {
     const msg: []const u8 = std.mem.span(message);
-    std.debug.print("{s}\n", .{msg});
+    stdio.writeStdoutLine(msg) catch return -1;
+    return 0;
+}
+
+/// Print a message to stderr (no color) -- for diagnostics/warnings, same
+/// distinction `console.error`/`.warn` make in z-interpreter: real
+/// program output goes through the functions above (stdout); use this
+/// only for the latter.
+/// Returns 0 on success, -1 on error.
+pub export fn z_print_err_puts(message: [*:0]const u8) callconv(.c) c_int {
+    const msg: []const u8 = std.mem.span(message);
+    stdio.writeStderrLine(msg) catch return -1;
     return 0;
 }
 

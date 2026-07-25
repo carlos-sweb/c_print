@@ -3,6 +3,7 @@ const ansi_codes = @import("ansi_codes.zig");
 const color_parser = @import("color_parser.zig");
 const number_formatter = @import("number_formatter.zig");
 const text_alignment = @import("text_alignment.zig");
+const stdio = @import("stdio.zig");
 
 const TextColor = ansi_codes.TextColor;
 const BackgroundColor = ansi_codes.BackgroundColor;
@@ -108,6 +109,8 @@ pub const cp_align_center = alignCenter;
 pub const cp_fill_char = withFillChar;
 pub const cp_print = print;
 pub const cp_println = println;
+pub const cp_print_err = printErr;
+pub const cp_println_err = printlnErr;
 pub const cp_to_string = toString;
 
 // ============================================================================
@@ -540,14 +543,24 @@ pub fn withFillChar(b: *CPrintBuilder, fill: u8) *CPrintBuilder {
 
 /// Write the buffer contents to stdout.
 pub fn print(b: *CPrintBuilder) !void {
-    // Use debug.print as a workaround for stdout in Zig 0.16.0
-    // This writes to stderr but serves the purpose
-    std.debug.print("{s}", .{b.buffer.items});
+    try stdio.writeStdout(b.buffer.items);
 }
 
 /// Write the buffer contents to stdout followed by a newline.
 pub fn println(b: *CPrintBuilder) !void {
-    std.debug.print("{s}\n", .{b.buffer.items});
+    try stdio.writeStdoutLine(b.buffer.items);
+}
+
+/// Write the buffer contents to stderr -- for diagnostics/warnings, same
+/// distinction `console.error`/`.warn` make in z-interpreter (real
+/// program output stays on stdout; use this only for the latter).
+pub fn printErr(b: *CPrintBuilder) !void {
+    try stdio.writeStderr(b.buffer.items);
+}
+
+/// Write the buffer contents to stderr followed by a newline.
+pub fn printlnErr(b: *CPrintBuilder) !void {
+    try stdio.writeStderrLine(b.buffer.items);
 }
 
 /// Return an allocated copy of the buffer contents.

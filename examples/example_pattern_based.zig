@@ -66,5 +66,5 @@ pub fn main() !void {
     );
 
     // Write buffer to stdout
-    std.debug.print("{s}", .{writer.buffered()});
+    try z_print.stdio.writeStdout(writer.buffered());
 }

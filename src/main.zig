@@ -1,4 +1,5 @@
 /// z_print - ANSI-colored console formatting library
+pub const stdio = @import("stdio.zig");
 pub const ansi_codes = @import("ansi_codes.zig");
 pub const color_parser = @import("color_parser.zig");
 pub const text_alignment = @import("text_alignment.zig");

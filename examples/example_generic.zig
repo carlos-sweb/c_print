@@ -59,5 +59,5 @@ pub fn main() !void {
     try writer.print("  Result: {s}\n", .{if (valid) @as([]const u8, "PASS") else "FAIL"});
 
     // Write buffer to stdout
-    std.debug.print("{s}", .{writer.buffered()});
+    try z_print.stdio.writeStdout(writer.buffered());
 }

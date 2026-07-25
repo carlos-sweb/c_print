@@ -96,5 +96,5 @@ pub fn main() !void {
     _ = bld.cp_str(bld.cp_color(&b, .bright_green), "OK");
     const result = try bld.cp_to_string(&b);
     defer allocator.free(result);
-    std.debug.print("{s}\n", .{result});
+    try z_print.stdio.writeStdoutLine(result);
 }
